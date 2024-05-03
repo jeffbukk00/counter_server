@@ -20,4 +20,4 @@ const shareLinkSchema = new Schema({
   expirationDate: Date,
 });
 
-export default model("ShareLink", shareLinkSchema);
+export default model("Share-Link", shareLinkSchema);

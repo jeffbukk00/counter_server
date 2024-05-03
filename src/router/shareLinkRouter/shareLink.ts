@@ -5,12 +5,12 @@ const router = Router();
 import shareLinkController from "@/controller/shareLinkController/shareLink";
 
 router.post("/upload", shareLinkController.uploadShareLink);
-router.post("/:shareLinkId/validation", shareLinkController.validateShareLink);
-router.get(
+router.get("/:shareLinkId/validation", shareLinkController.validateShareLink);
+router.post(
   "/:shareLinkId/download/all",
   shareLinkController.downloadShareLinkAll
 );
-router.get(
+router.post(
   "/:shareLinkId/download/secure",
   shareLinkController.downloadShareLinkSecure
 );

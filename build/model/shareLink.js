@@ -20,4 +20,4 @@ const shareLinkSchema = new mongoose_1.Schema({
     userId: { type: mongoose_1.Schema.Types.ObjectId, ref: "User" },
     expirationDate: Date,
 });
-exports.default = (0, mongoose_1.model)("ShareLink", shareLinkSchema);
+exports.default = (0, mongoose_1.model)("Share-Link", shareLinkSchema);
