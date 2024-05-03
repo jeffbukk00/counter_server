@@ -5,7 +5,7 @@ interface BucketDataType {
 }
 
 const schema = Joi.object({
-  title: Joi.string().max(20).required(),
+  title: Joi.string().max(15).required(),
 });
 
 export const bucketValidation = (bucketData: BucketDataType) =>

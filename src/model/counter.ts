@@ -1,13 +1,12 @@
 import { Schema, model } from "mongoose";
 
 const counterSchema = new Schema({
-  counterTitle: String,
+  title: String,
   startCount: Number,
   currentCount: Number,
   endCount: Number,
   direction: Number,
   achievementStack: Number,
-  bucketId: { type: Schema.Types.ObjectId, ref: "Bucket" },
   motivationIds: [Schema.Types.ObjectId],
 });
 

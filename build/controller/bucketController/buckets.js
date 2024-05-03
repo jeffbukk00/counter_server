@@ -57,8 +57,8 @@ const duplicateBucket = (req, res, _) => __awaiter(void 0, void 0, void 0, funct
         throw new HttpError_1.HttpError(404, { message: "Bucket not found" });
     const duplicatedBucket = new bucket_1.default({
         title: bucket.title,
-        counterIds: bucket.counterIds,
-        motivationIds: bucket.motivationIds,
+        counterIds: [],
+        motivationIds: [],
     });
     yield duplicatedBucket.save();
     let updatedBucketIds = [...user.bucketIds];

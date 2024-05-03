@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.bucketValidation = void 0;
 const joi_1 = __importDefault(require("joi"));
 const schema = joi_1.default.object({
-    title: joi_1.default.string().max(20).required(),
+    title: joi_1.default.string().max(15).required(),
 });
 const bucketValidation = (bucketData) => schema.validate(bucketData);
 exports.bucketValidation = bucketValidation;

@@ -60,8 +60,8 @@ const duplicateBucket = async (
 
   const duplicatedBucket = new Bucket({
     title: bucket.title,
-    counterIds: bucket.counterIds,
-    motivationIds: bucket.motivationIds,
+    counterIds: [],
+    motivationIds: [],
   });
   await duplicatedBucket.save();
 

@@ -33,6 +33,8 @@ import naverOauthRouter from "@/router/authRouter/oauthRouter/naver";
 import userRouter from "@/router/userRouter/user";
 import bucketsRouter from "@/router/bucketRouter/buckets";
 import bucketRouter from "@/router/bucketRouter/bucket";
+import countersRouter from "@/router/counterRouter/counters";
+import counterRouter from "@/router/counterRouter/counter";
 
 import confirmAuthorized from "@/middlewares/confirmAuthorized";
 
@@ -49,6 +51,8 @@ app.use("/", confirmAuthorized);
 app.use("/user", userRouter);
 app.use("/buckets", bucketsRouter);
 app.use("/bucket", bucketRouter);
+app.use("/counters", countersRouter);
+app.use("/counter", counterRouter);
 
 import { errorWrapper } from "./error/errorWrapper";
 import { HttpError } from "./error/HttpError";
