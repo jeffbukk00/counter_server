@@ -29,10 +29,27 @@ const getUserData = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         },
     });
 });
-const updateUserProfile = (req, res, next) => { };
-const updateUnreadPositivePopupIds = (req, res, next) => { };
+// const updateUserProfile = (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {};
+const updateUnreadPositivePopupIds = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req;
+    const { checkedPositivePopupId } = req.body;
+    if (!checkedPositivePopupId)
+        throw new HttpError_1.HttpError(400, { message: "Request has no correct body" });
+    const user = yield user_1.default.findOne({ _id: userId });
+    if (!user)
+        throw new HttpError_1.HttpError(404, { message: "User not found" });
+    user.unreadPositivePopupIds = [...user.unreadPositivePopupIds].filter((e) => e !== checkedPositivePopupId);
+    yield user.save();
+    return res
+        .status(201)
+        .json({ message: "Update unreadPositivePopupIds successfully" });
+});
 exports.default = {
     getUserData: (0, errorWrapper_1.errorWrapper)(getUserData),
-    updateUserProfile: (0, errorWrapper_1.errorWrapper)(updateUserProfile),
+    // updateUserProfile: errorWrapper(updateUserProfile),
     updateUnreadPositivePopupIds: (0, errorWrapper_1.errorWrapper)(updateUnreadPositivePopupIds),
 };

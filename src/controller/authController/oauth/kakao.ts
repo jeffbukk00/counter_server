@@ -81,8 +81,8 @@ const loginUsingKakaoOauth = async (req: Request, res: Response) => {
       profilePictureUrl: picture,
       snsId,
       provider: "kakao",
-      // bucketIds
-      // unreadPositivePopupIds
+      bucketIds: [],
+      unreadPositivePopupIds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     });
     await newUser.save();
     userId = newUser.id;

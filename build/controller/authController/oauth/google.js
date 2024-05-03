@@ -58,8 +58,8 @@ const loginUsingGoogleOauth = (req, res) => __awaiter(void 0, void 0, void 0, fu
             profilePictureUrl: picture,
             snsId,
             provider: "google",
-            // bucketIds
-            // unreadPositivePopupIds
+            bucketIds: [],
+            unreadPositivePopupIds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
         });
         yield newUser.save();
         userId = newUser.id;

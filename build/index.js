@@ -32,8 +32,15 @@ const google_1 = __importDefault(require("@/router/authRouter/oauthRouter/google
 const kakao_1 = __importDefault(require("@/router/authRouter/oauthRouter/kakao"));
 const naver_1 = __importDefault(require("@/router/authRouter/oauthRouter/naver"));
 const user_1 = __importDefault(require("@/router/userRouter/user"));
+const buckets_1 = __importDefault(require("@/router/bucketRouter/buckets"));
+const bucket_1 = __importDefault(require("@/router/bucketRouter/bucket"));
+const confirmAuthorized_1 = __importDefault(require("@/middlewares/confirmAuthorized"));
 app.use("/auth", authMain_1.default, google_1.default, kakao_1.default, naver_1.default);
+// 권한 확인
+app.use("/", confirmAuthorized_1.default);
 app.use("/user", user_1.default);
+app.use("/buckets", buckets_1.default);
+app.use("/bucket", bucket_1.default);
 const errorWrapper_1 = require("./error/errorWrapper");
 const HttpError_1 = require("./error/HttpError");
 app.use("/", (0, errorWrapper_1.errorWrapper)(() => {

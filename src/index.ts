@@ -31,6 +31,11 @@ import googleOauthRouter from "@/router/authRouter/oauthRouter/google";
 import kakaoOauthRouter from "@/router/authRouter/oauthRouter/kakao";
 import naverOauthRouter from "@/router/authRouter/oauthRouter/naver";
 import userRouter from "@/router/userRouter/user";
+import bucketsRouter from "@/router/bucketRouter/buckets";
+import bucketRouter from "@/router/bucketRouter/bucket";
+
+import confirmAuthorized from "@/middlewares/confirmAuthorized";
+
 app.use(
   "/auth",
   authMainRouter,
@@ -38,7 +43,12 @@ app.use(
   kakaoOauthRouter,
   naverOauthRouter
 );
+// 권한 확인
+app.use("/", confirmAuthorized);
+
 app.use("/user", userRouter);
+app.use("/buckets", bucketsRouter);
+app.use("/bucket", bucketRouter);
 
 import { errorWrapper } from "./error/errorWrapper";
 import { HttpError } from "./error/HttpError";
