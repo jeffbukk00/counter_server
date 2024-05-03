@@ -35,6 +35,8 @@ import bucketsRouter from "@/router/bucketRouter/buckets";
 import bucketRouter from "@/router/bucketRouter/bucket";
 import countersRouter from "@/router/counterRouter/counters";
 import counterRouter from "@/router/counterRouter/counter";
+import motivationsRouter from "@/router/motivationRouter/motivations";
+import motivationRouter from "@/router/motivationRouter/motivation";
 
 import confirmAuthorized from "@/middlewares/confirmAuthorized";
 
@@ -53,6 +55,8 @@ app.use("/buckets", bucketsRouter);
 app.use("/bucket", bucketRouter);
 app.use("/counters", countersRouter);
 app.use("/counter", counterRouter);
+app.use("/motivations", motivationsRouter);
+app.use("/motivation", motivationRouter);
 
 import { errorWrapper } from "./error/errorWrapper";
 import { HttpError } from "./error/HttpError";
