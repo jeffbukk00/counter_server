@@ -37,7 +37,8 @@ const createCounter = async (req: Request, res: Response, _: NextFunction) => {
     endCount,
     direction,
     achievementStack: 0,
-    motivationIds: [],
+    motivationTextIds: [],
+    motivationLinkIds: [],
   });
   await newCounter.save();
 
@@ -66,7 +67,8 @@ const duplicateCounter = async (
     endCount: counter.endCount,
     direction: counter.direction,
     achievementStack: 0,
-    motivationIds: [],
+    motivationTextIds: [],
+    motivationLinkIds: [],
   });
   await duplicatedCounter.save();
 

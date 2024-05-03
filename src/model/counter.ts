@@ -7,7 +7,8 @@ const counterSchema = new Schema({
   endCount: Number,
   direction: Number,
   achievementStack: Number,
-  motivationIds: [Schema.Types.ObjectId],
+  motivationTextIds: [{ type: Schema.Types.ObjectId, ref: "Motivation-Text" }],
+  motivationLinkIds: [{ type: Schema.Types.ObjectId, ref: "Motivation-Link" }],
 });
 
 export default model("Counter", counterSchema);

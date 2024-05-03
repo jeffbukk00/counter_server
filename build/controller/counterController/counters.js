@@ -44,7 +44,8 @@ const createCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, functio
         endCount,
         direction,
         achievementStack: 0,
-        motivationIds: [],
+        motivationTextIds: [],
+        motivationLinkIds: [],
     });
     yield newCounter.save();
     bucket.counterIds.push(newCounter._id);
@@ -66,7 +67,8 @@ const duplicateCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, func
         endCount: counter.endCount,
         direction: counter.direction,
         achievementStack: 0,
-        motivationIds: [],
+        motivationTextIds: [],
+        motivationLinkIds: [],
     });
     yield duplicatedCounter.save();
     let updatedCounterIds = [...bucket.counterIds];

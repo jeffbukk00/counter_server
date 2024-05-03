@@ -35,8 +35,11 @@ import bucketsRouter from "@/router/bucketRouter/buckets";
 import bucketRouter from "@/router/bucketRouter/bucket";
 import countersRouter from "@/router/counterRouter/counters";
 import counterRouter from "@/router/counterRouter/counter";
-import motivationsRouter from "@/router/motivationRouter/motivations";
-import motivationRouter from "@/router/motivationRouter/motivation";
+import motivationTextsRouter from "@/router/motivationRouter/motivationsTexts";
+import motivationTextRouter from "@/router/motivationRouter/motivationText";
+import motivationLinksRouter from "@/router/motivationRouter/motivationLinks";
+import motivationLinkRouter from "@/router/motivationRouter/motivationLink";
+import shareLinkRouter from "@/router/shareLinkRouter/shareLink";
 
 import confirmAuthorized from "@/middlewares/confirmAuthorized";
 
@@ -55,8 +58,11 @@ app.use("/buckets", bucketsRouter);
 app.use("/bucket", bucketRouter);
 app.use("/counters", countersRouter);
 app.use("/counter", counterRouter);
-app.use("/motivations", motivationsRouter);
-app.use("/motivation", motivationRouter);
+app.use("/motivation-texts", motivationTextsRouter);
+app.use("/motivation-text", motivationTextRouter);
+app.use("/motivation-links", motivationLinksRouter);
+app.use("/motivation-link", motivationLinkRouter);
+app.use("/sharing", shareLinkRouter);
 
 import { errorWrapper } from "./error/errorWrapper";
 import { HttpError } from "./error/HttpError";

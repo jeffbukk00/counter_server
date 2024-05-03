@@ -36,8 +36,11 @@ const buckets_1 = __importDefault(require("@/router/bucketRouter/buckets"));
 const bucket_1 = __importDefault(require("@/router/bucketRouter/bucket"));
 const counters_1 = __importDefault(require("@/router/counterRouter/counters"));
 const counter_1 = __importDefault(require("@/router/counterRouter/counter"));
-const motivations_1 = __importDefault(require("@/router/motivationRouter/motivations"));
-const motivation_1 = __importDefault(require("@/router/motivationRouter/motivation"));
+const motivationsTexts_1 = __importDefault(require("@/router/motivationRouter/motivationsTexts"));
+const motivationText_1 = __importDefault(require("@/router/motivationRouter/motivationText"));
+const motivationLinks_1 = __importDefault(require("@/router/motivationRouter/motivationLinks"));
+const motivationLink_1 = __importDefault(require("@/router/motivationRouter/motivationLink"));
+const shareLink_1 = __importDefault(require("@/router/shareLinkRouter/shareLink"));
 const confirmAuthorized_1 = __importDefault(require("@/middlewares/confirmAuthorized"));
 app.use("/auth", authMain_1.default, google_1.default, kakao_1.default, naver_1.default);
 // 권한 확인
@@ -47,8 +50,11 @@ app.use("/buckets", buckets_1.default);
 app.use("/bucket", bucket_1.default);
 app.use("/counters", counters_1.default);
 app.use("/counter", counter_1.default);
-app.use("/motivations", motivations_1.default);
-app.use("/motivation", motivation_1.default);
+app.use("/motivation-texts", motivationsTexts_1.default);
+app.use("/motivation-text", motivationText_1.default);
+app.use("/motivation-links", motivationLinks_1.default);
+app.use("/motivation-link", motivationLink_1.default);
+app.use("/sharing", shareLink_1.default);
 const errorWrapper_1 = require("./error/errorWrapper");
 const HttpError_1 = require("./error/HttpError");
 app.use("/", (0, errorWrapper_1.errorWrapper)(() => {

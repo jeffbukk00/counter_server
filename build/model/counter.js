@@ -8,6 +8,7 @@ const counterSchema = new mongoose_1.Schema({
     endCount: Number,
     direction: Number,
     achievementStack: Number,
-    motivationIds: [mongoose_1.Schema.Types.ObjectId],
+    motivationTextIds: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Motivation-Text" }],
+    motivationLinkIds: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Motivation-Link" }],
 });
 exports.default = (0, mongoose_1.model)("Counter", counterSchema);

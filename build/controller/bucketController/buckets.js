@@ -40,7 +40,12 @@ const createBucket = (req, res, _) => __awaiter(void 0, void 0, void 0, function
     if (error)
         throw new HttpError_1.HttpError(400, { message: error.details[0].message });
     const { title } = req.body;
-    const newBucket = new bucket_1.default({ title, counterIds: [], motivationIds: [] });
+    const newBucket = new bucket_1.default({
+        title,
+        counterIds: [],
+        motivationTextIds: [],
+        motivationLinkIds: [],
+    });
     yield newBucket.save();
     user.bucketIds.push(newBucket._id);
     yield user.save();
@@ -58,7 +63,8 @@ const duplicateBucket = (req, res, _) => __awaiter(void 0, void 0, void 0, funct
     const duplicatedBucket = new bucket_1.default({
         title: bucket.title,
         counterIds: [],
-        motivationIds: [],
+        motivationTextIds: [],
+        motivationLinkIds: [],
     });
     yield duplicatedBucket.save();
     let updatedBucketIds = [...user.bucketIds];
@@ -89,9 +95,8 @@ const mergeBuckets = (req, res, _) => __awaiter(void 0, void 0, void 0, function
     bucketSubject.counterIds = [...bucketSubject.counterIds].concat([
         ...bucketObject.counterIds,
     ]);
-    bucketSubject.motivationIds = [...bucketSubject.motivationIds].concat([
-        ...bucketObject.motivationIds,
-    ]);
+    bucketSubject.motivationTextIds = [...bucketSubject.motivationTextIds].concat([...bucketObject.motivationTextIds]);
+    bucketSubject.motivationLinkIds = [...bucketSubject.motivationLinkIds].concat([...bucketObject.motivationLinkIds]);
     yield bucketSubject.save();
     yield bucket_1.default.deleteOne({ _id: bucketIdObject });
     user.bucketIds = [...user.bucketIds].filter((e) => e.toString() !== bucketIdObject);

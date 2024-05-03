@@ -34,7 +34,12 @@ const createBucket = async (req: Request, res: Response, _: NextFunction) => {
   if (error) throw new HttpError(400, { message: error.details[0].message });
 
   const { title } = req.body;
-  const newBucket = new Bucket({ title, counterIds: [], motivationIds: [] });
+  const newBucket = new Bucket({
+    title,
+    counterIds: [],
+    motivationTextIds: [],
+    motivationLinkIds: [],
+  });
   await newBucket.save();
 
   user.bucketIds.push(newBucket._id);
@@ -61,7 +66,8 @@ const duplicateBucket = async (
   const duplicatedBucket = new Bucket({
     title: bucket.title,
     counterIds: [],
-    motivationIds: [],
+    motivationTextIds: [],
+    motivationLinkIds: [],
   });
   await duplicatedBucket.save();
 
@@ -98,9 +104,12 @@ const mergeBuckets = async (req: Request, res: Response, _: NextFunction) => {
   bucketSubject.counterIds = [...bucketSubject.counterIds].concat([
     ...bucketObject.counterIds,
   ]);
-  bucketSubject.motivationIds = [...bucketSubject.motivationIds].concat([
-    ...bucketObject.motivationIds,
-  ]);
+  bucketSubject.motivationTextIds = [...bucketSubject.motivationTextIds].concat(
+    [...bucketObject.motivationTextIds]
+  );
+  bucketSubject.motivationLinkIds = [...bucketSubject.motivationLinkIds].concat(
+    [...bucketObject.motivationLinkIds]
+  );
 
   await bucketSubject.save();
   await Bucket.deleteOne({ _id: bucketIdObject });
