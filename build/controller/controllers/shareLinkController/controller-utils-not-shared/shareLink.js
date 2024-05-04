@@ -15,9 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.findShareLink = void 0;
 const shareLink_1 = __importDefault(require("@/model/shareLink"));
 const HttpError_1 = require("@/error/HttpError");
+// 공유 링크를 데이터베이스로부터 가져오는 함수.
 const findShareLink = (shareLinkId, errorResponse) => __awaiter(void 0, void 0, void 0, function* () {
     const shareLink = yield shareLink_1.default.findOne({ _id: shareLinkId });
-    // 요청 파라미터에 포함된 share link id에 해당 되는 공유 링크가 존재하지 않는 다면, 404 에러 throw
     if (!shareLink)
         throw new HttpError_1.HttpError(404, errorResponse);
     return shareLink;

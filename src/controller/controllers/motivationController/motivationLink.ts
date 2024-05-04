@@ -12,7 +12,7 @@ const getMotivationLink = async (
   _: NextFunction
 ) => {
   const { motivationLinkId } = req.params;
-  // 요청 파라미터에 존재하는 motivationLinkId에 해당 하는 모티베이션 링크를 데이터베이스로부터 가져옴.
+  // 모티베이션 링크를 가져옴.
   const motivationLink = await findMotivationLink(motivationLinkId);
 
   return res.status(200).json({ motivationLink });
@@ -25,14 +25,14 @@ const editMotivationLink = async (
   _: NextFunction
 ) => {
   const { motivationLinkId } = req.params;
-  // 요청 파라미터에 존재하는 motivationLinkId에 해당 하는 모티베이션 링크를 데이터베이스로부터 가져옴.
+  // 모티베이션 링크를 가져옴.
   const motivationLink = await findMotivationLink(motivationLinkId);
 
-  // 전달 된 모티베이션 링크 데이터에 대한 유효성 검사 진행.
+  // 모티베이션 링크 수정에 대한 유효성 검사.
   const { error } = motivationLinkValidation(req.body);
-  // 유효성 검사를 실패한다면, 400 에러를 throw.
   if (error) throw new HttpError(400, { message: error.details[0].message });
 
+  // 모티베이션 링크 수정 및 저장.
   const { title, link } = req.body;
   motivationLink.title = title;
   motivationLink.link = link;

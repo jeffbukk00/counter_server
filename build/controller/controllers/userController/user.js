@@ -32,17 +32,16 @@ const getUserData = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
 //   res: Response,
 //   next: NextFunction
 // ) => {};
-// 유저 데이터 내 "unreadPositivePopupIds" 필드를 업데이트 하기 위한 컨트롤러.
+// "unreadPositivePopupIds" 필드를 업데이트 하기 위한 컨트롤러.
 const updateUnreadPositivePopupIds = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { checkedPositivePopupId } = req.body;
-    // 요청의 body 내 "checkedPositivePopupId" 필드에 어떠한 값도 할당 되어 있지 않다면, 400 에러를 throw.
     if (!checkedPositivePopupId)
         throw new HttpError_1.HttpError(400, { message: "Request has no correct body" });
     const { userId } = req;
-    // 데이터베이스로부터 유저 데이터를 쿼리하는 함수.
+    // 데이터베이스로부터 유저 데이터를 가져옴.
     const user = yield (0, find_1.findUser)(userId);
-    // 유저 데이터 내 'unreadPositivePopupIds' 필드의 배열 업데이트.
-    // 요청의 body로 전달 된 'checkedPositivePopupId'와 일치하는 요소를 기존 배열에서 제거.
+    // 'unreadPositivePopupIds' 필드 업데이트.
+    // 'checkedPositivePopupId'와 일치하는 요소를 기존 배열에서 제거.
     user.unreadPositivePopupIds = [...user.unreadPositivePopupIds].filter((e) => e !== checkedPositivePopupId);
     yield user.save();
     return res

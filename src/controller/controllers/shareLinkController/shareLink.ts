@@ -20,18 +20,15 @@ const uploadShareLink = async (
   const { userId } = req;
 
   const { bucketId } = req.body;
-  // 요청의 body로 전달 된 bucket id에 해당하는 버킷을 데이터베이스로부터 가져옴.
-  // 공유할 버킷.
-  // 해당 버킷 내에 존재하는 모티베이션 텍스트들과 모티베이션 링크들도 데이터베이스로부터 가져옴.
+
+  // 공유할 버킷을 데이터베이스로부터 가져옴.
   const bucket = await Bucket.findOne({ _id: bucketId }).populate(
     "motivationTextIds motivationLinkIds",
     "-_id"
   );
-  // 요청의 body로 전달 된 bucket id에 해당하는 버킷이 데이터베이스 내 존재하지 않을 경우, 404 에러를 throw.
   if (!bucket) throw new HttpError(404, { message: "Bucket not found" });
 
   // 공유할 버킷 내에 존재하는 카운터들을 데이터베이스로부터 가져옴.
-  // 각각의 카운터 내에 존재하는 모티베이션 텍스트들과 모티베이션 링크들을 데이터베이스로부터 가져옴.
   const counterIds = bucket.counterIds;
   const counters = await Counter.find({ _id: { $in: counterIds } }).populate(
     "motivationTextIds motivationLinkIds",
@@ -44,6 +41,7 @@ const uploadShareLink = async (
     motivationTexts: bucket.motivationTextIds,
     motivationLinks: bucket.motivationLinkIds,
   };
+
   const sharedCounters = [...counters].map((e) => {
     return {
       title: e.title,
@@ -54,7 +52,9 @@ const uploadShareLink = async (
       motivationLinks: e.motivationLinkIds,
     };
   });
+
   const expirationDate = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
+
   const newShareLink = new ShareLink({
     bucket: sharedBucket,
     counters: sharedCounters,
@@ -75,7 +75,8 @@ const validateShareLink = async (
 ) => {
   const { shareLinkId } = req.params;
 
-  // 요청 파라미터의 share link id에 해당하는 공유 링크를 데이터베이스로부터 가져옴.
+  // 공유 링크를 데이터베이스로부터 가져옴.
+  // 일치하는 공유 링크가 존재한다면, 유효한 공유 링크.
   const shareLink = await findShareLink(shareLinkId, { isValid: false });
 
   // 공유 링크를 업로드(생성)한 유저를 데이터베이스로부터 가져옴.
@@ -98,23 +99,24 @@ const downloadShareLink = async (
   _: NextFunction
 ) => {
   const { userId } = req;
-  // 요청한 유저의 user id에 해당되는 유저를 데이터베이스로부터 가져옴.
+  // 요청한 유저를 데이터베이스로부터 가져옴.
   const user = await User.findOne({ _id: userId });
-  // 요청한 유저의 user id에 해당되는 유저가 존재하지 않을 경우, 404 에러를 throw.
   if (!user) throw new HttpError(404, { message: "User not found" });
 
   const { shareLinkId, downloadType } = req.params;
-  // 요청 파라미터의 share link id에 해당하는 공유 링크를 데이터베이스로부터 가져옴.
+  // 공유 링크 및 공유할 버킷 데이터를 데이터베이스로부터 가져옴.
   const shareLink = await findShareLink(shareLinkId, {
     message: "This share link was expired",
   });
 
+  // 공유할 버킷 데이터를 데이터베이스 내 복제
   const duplicatedBucketId = await duplicateBucketUtil(
     shareLink.bucket,
     shareLink.counters,
     downloadType
   );
 
+  // 복제된 버킷을 다운로드를 요청한 유저가 참조하는 버킷 리스트에 추가 및 저장.
   user.bucketIds.push(duplicatedBucketId);
   await user.save();
 

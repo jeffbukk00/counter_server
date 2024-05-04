@@ -16,20 +16,20 @@ const motivation_2 = require("@/controller/controllers/motivationController/cont
 // 단일 모티베이션 링크를 가져오는 역할을 하는 컨트롤러.
 const getMotivationLink = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { motivationLinkId } = req.params;
-    // 요청 파라미터에 존재하는 motivationLinkId에 해당 하는 모티베이션 링크를 데이터베이스로부터 가져옴.
+    // 모티베이션 링크를 가져옴.
     const motivationLink = yield (0, motivation_2.findMotivationLink)(motivationLinkId);
     return res.status(200).json({ motivationLink });
 });
 // 모티베이션 링크를 수정하는 역할을 하는 컨트롤러.
 const editMotivationLink = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { motivationLinkId } = req.params;
-    // 요청 파라미터에 존재하는 motivationLinkId에 해당 하는 모티베이션 링크를 데이터베이스로부터 가져옴.
+    // 모티베이션 링크를 가져옴.
     const motivationLink = yield (0, motivation_2.findMotivationLink)(motivationLinkId);
-    // 전달 된 모티베이션 링크 데이터에 대한 유효성 검사 진행.
+    // 모티베이션 링크 수정에 대한 유효성 검사.
     const { error } = (0, motivation_1.motivationLinkValidation)(req.body);
-    // 유효성 검사를 실패한다면, 400 에러를 throw.
     if (error)
         throw new HttpError_1.HttpError(400, { message: error.details[0].message });
+    // 모티베이션 링크 수정 및 저장.
     const { title, link } = req.body;
     motivationLink.title = title;
     motivationLink.link = link;

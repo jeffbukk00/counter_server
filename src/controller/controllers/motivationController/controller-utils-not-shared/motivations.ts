@@ -4,13 +4,13 @@ import Counter from "@/model/counter";
 import { HttpError } from "@/error/HttpError";
 import motivationConstants from "@/constants/motivation";
 
-// 요청의 query string으로 전달 된 boxType에 대한 유효성 검사.
+// 모티베이션들을 저장하는 박스의 타입(버킷 혹은 카운터) 판별하는 함수.
 export const validateBoxType = (boxType: any) => {
-  //  1. boxType이 query string 내에 존재하는지
+  //  1. query string 내 "boxType" 필드가 비어 있지 않은지.
   if (!boxType) throw new HttpError(400, { message: "Invalid query string" });
   const parsedBoxType = parseInt(boxType);
 
-  //  2. 요청의 query string으로 전달 된 boxType이 미리 지정 된 box의 type에 해당하는지.
+  //  2. query string 내 "boxType" 필드에 할당 된 값이 미리 지정 된 box의 type들에 해당하는지.
   if (
     parsedBoxType !== motivationConstants.boxType.bucket &&
     parsedBoxType !== motivationConstants.boxType.counter
@@ -20,16 +20,15 @@ export const validateBoxType = (boxType: any) => {
   return parsedBoxType;
 };
 
+// 박스 타입(버킷 혹은 카운터)에 따라, 버킷 혹은 카운터를 가져오는 함수.
 export const findBox = async (
   boxId: string | undefined,
   parsedBoxType: number
 ) => {
-  // 전달 된 boxType에 따라 버킷을 가져올 지, 카운터를 가져올 지 결정.
   const box =
     parsedBoxType === motivationConstants.boxType.bucket
       ? await Bucket.findOne({ _id: boxId })
       : await Counter.findOne({ _id: boxId });
-  // 요청 파라미터로 전달 된 box id에 해당하는 버킷 및 카운터가 존재하지 않는다면, 404 에러를 throw.
   if (!box) throw new HttpError(404, { message: "Box not found" });
 
   return box;
