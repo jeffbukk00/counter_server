@@ -4,15 +4,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.motivationLinkValidation = exports.motivationTextValidation = void 0;
+// 유효성 검사를 위한 라이브러리.
 const joi_1 = __importDefault(require("joi"));
+// 모티베이션 텍스트 생성 및 편집에 대한 유효성 검사를 위한 스키마 설정.
+//  1. "text" 필드 => string 타입 / 필수 입력
 const motivationTextSchema = joi_1.default.object({
     text: joi_1.default.string().required(),
 });
+// 모티베이션 링크 생성 및 편집에 대한 유효성 검사를 위한 스키마 설정.
+//  1. "title" 필드 => string 타입 / 15자 이하 / 필수 입력
+//  2. "link" 필드 => string 타입 / 필수 입력
 const motivationLinkSchema = joi_1.default.object({
     title: joi_1.default.string().max(15).required(),
     link: joi_1.default.string().required(),
 });
+// 모티베이션 텍스트 생성 및 편집에 대한 유효성 검사를 실행하는 함수.
 const motivationTextValidation = (motivationTextData) => motivationTextSchema.validate(motivationTextData);
 exports.motivationTextValidation = motivationTextValidation;
+// 모티베이션 링크 생성 및 편집에 대한 유효성 검사를 실행하는 함수.
 const motivationLinkValidation = (motivationLinkData) => motivationLinkSchema.validate(motivationLinkData);
 exports.motivationLinkValidation = motivationLinkValidation;

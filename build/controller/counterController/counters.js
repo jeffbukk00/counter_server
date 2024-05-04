@@ -12,24 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const bucket_1 = __importDefault(require("@/model/bucket"));
 const counter_1 = __importDefault(require("@/model/counter"));
 const errorWrapper_1 = require("@/error/errorWrapper");
 const HttpError_1 = require("@/error/HttpError");
 const counter_2 = require("@/validation/counter");
 const counter_3 = __importDefault(require("@/constants/counter"));
+const utils_1 = require("../utils");
 const getCounterIds = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { bucketId } = req.params;
-    const bucket = yield bucket_1.default.findOne({ _id: bucketId });
-    if (!bucket)
-        throw new HttpError_1.HttpError(404, { message: "Bucket not found" });
+    const bucket = yield (0, utils_1.findBucket)(bucketId);
     return res.status(200).json({ counterIds: bucket.counterIds });
 });
 const createCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { bucketId } = req.params;
-    const bucket = yield bucket_1.default.findOne({ _id: bucketId });
-    if (!bucket)
-        throw new HttpError_1.HttpError(404, { message: "Bucket not found" });
+    const bucket = yield (0, utils_1.findBucket)(bucketId);
     const { error } = (0, counter_2.counterValidation)(req.body);
     if (error)
         throw new HttpError_1.HttpError(400, { message: error.details[0].message });
@@ -54,12 +50,8 @@ const createCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, functio
 });
 const duplicateCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { bucketId, counterId } = req.params;
-    const bucket = yield bucket_1.default.findOne({ _id: bucketId });
-    if (!bucket)
-        throw new HttpError_1.HttpError(404, { message: "Bucket not found" });
-    const counter = yield counter_1.default.findOne({ _id: counterId });
-    if (!counter)
-        throw new HttpError_1.HttpError(404, { message: "Counter not found" });
+    const bucket = yield (0, utils_1.findBucket)(bucketId);
+    const counter = yield (0, utils_1.findCounter)(counterId);
     const duplicatedCounter = new counter_1.default({
         title: counter.title,
         startCount: counter.startCount,
@@ -70,7 +62,6 @@ const duplicateCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, func
         motivationTextIds: [],
         motivationLinkIds: [],
     });
-    yield duplicatedCounter.save();
     let updatedCounterIds = [...bucket.counterIds];
     const idx = updatedCounterIds.findIndex((e) => e.toString() === counterId);
     if (idx === -1)
@@ -82,21 +73,16 @@ const duplicateCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, func
     slicedBeforeIdx.push(duplicatedCounter._id);
     updatedCounterIds = [...slicedBeforeIdx, ...slicedAfterIdx];
     bucket.counterIds = updatedCounterIds;
+    yield duplicatedCounter.save();
     yield bucket.save();
     return res.status(201).json({ message: "Duplicate counter successfully" });
 });
 const moveCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { bucketIdSubject, counterId } = req.params;
     const { bucketIdObject } = req.body;
-    const bucketSubject = yield bucket_1.default.findOne({ _id: bucketIdSubject });
-    if (!bucketSubject)
-        throw new HttpError_1.HttpError(404, { message: "Subject bucket not found" });
-    const bucketObject = yield bucket_1.default.findOne({ _id: bucketIdObject });
-    if (!bucketObject)
-        throw new HttpError_1.HttpError(404, { message: "Object bucket not found" });
-    const counter = yield counter_1.default.findOne({ _id: counterId });
-    if (!counter)
-        throw new HttpError_1.HttpError(404, { message: "Counter not found" });
+    const bucketSubject = yield (0, utils_1.findBucket)(bucketIdSubject);
+    const bucketObject = yield (0, utils_1.findBucket)(bucketIdObject);
+    const counter = yield (0, utils_1.findCounter)(counterId);
     bucketSubject.counterIds = [...bucketSubject.counterIds].filter((e) => e.toString() !== counterId);
     bucketObject.counterIds.push(counter._id);
     yield bucketSubject.save();
@@ -105,13 +91,9 @@ const moveCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, function*
 });
 const removeCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { bucketId, counterId } = req.params;
-    const bucket = yield bucket_1.default.findOne({ _id: bucketId });
-    if (!bucket)
-        throw new HttpError_1.HttpError(404, { message: "Bucket not found" });
-    const counter = yield counter_1.default.findOne({ _id: counterId });
-    if (!counter)
-        throw new HttpError_1.HttpError(404, { message: "Counter not found" });
-    yield counter_1.default.deleteOne({ _id: counterId });
+    const bucket = yield (0, utils_1.findBucket)(bucketId);
+    const counter = yield (0, utils_1.findCounter)(counterId);
+    yield (0, utils_1.removeCounterUtil)(counter);
     bucket.counterIds = [...bucket.counterIds].filter((e) => e.toString() !== counterId);
     yield bucket.save();
     return res.status(201).json({ message: "Delete counter successfully" });

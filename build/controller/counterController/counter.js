@@ -12,35 +12,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const counter_1 = __importDefault(require("@/model/counter"));
 const errorWrapper_1 = require("@/error/errorWrapper");
 const HttpError_1 = require("@/error/HttpError");
-const counter_2 = require("@/validation/counter");
-const counter_3 = __importDefault(require("@/constants/counter"));
+const counter_1 = require("@/validation/counter");
+const counter_2 = __importDefault(require("@/constants/counter"));
+const utils_1 = require("../utils");
 const getCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { counterId } = req.params;
-    const counter = yield counter_1.default.findOne({ _id: counterId });
-    if (!counter)
-        throw new HttpError_1.HttpError(404, { message: "Counter not found" });
+    const counter = yield (0, utils_1.findCounter)(counterId);
     return res.status(200).json({ counter });
 });
 const editCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { counterId } = req.params;
-    const counter = yield counter_1.default.findOne({ _id: counterId });
-    if (!counter)
-        throw new HttpError_1.HttpError(404, { message: "Counter not found" });
-    const { error } = (0, counter_2.counterValidation)(req.body);
+    const counter = yield (0, utils_1.findCounter)(counterId);
+    const { error } = (0, counter_1.counterValidation)(req.body);
     if (error)
         throw new HttpError_1.HttpError(400, { message: error.details[0].message });
     const { title, startCount, endCount } = req.body;
     const direction = startCount < endCount
-        ? counter_3.default.direction.up
-        : counter_3.default.direction.down;
+        ? counter_2.default.direction.up
+        : counter_2.default.direction.down;
     counter.title = title;
     counter.startCount = startCount;
     counter.endCount = endCount;
     counter.direction = direction;
-    const counterEditValidationResult = (0, counter_2.counterEditValidation)(counter.direction, counter.startCount, counter.currentCount, counter.endCount);
+    const counterEditValidationResult = (0, counter_1.counterEditValidation)(counter.direction, counter.startCount, counter.currentCount, counter.endCount);
     if (!counterEditValidationResult && counterEditValidationResult === false)
         throw new HttpError_1.HttpError(400, { message: "Invalid input from client side" });
     yield counter.save();
@@ -48,11 +44,9 @@ const editCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, function*
 });
 const updateCount = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { counterId } = req.params;
-    const counter = yield counter_1.default.findOne({ _id: counterId });
-    if (!counter)
-        throw new HttpError_1.HttpError(404, { message: "Counter not found" });
+    const counter = yield (0, utils_1.findCounter)(counterId);
     const { updatedCurrentCount } = req.body;
-    const countUpdateValidationResult = (0, counter_2.countUpdateValidation)(counter.direction, counter.startCount, updatedCurrentCount, counter.endCount);
+    const countUpdateValidationResult = (0, counter_1.countUpdateValidation)(counter.direction, counter.startCount, updatedCurrentCount, counter.endCount);
     if (!countUpdateValidationResult && countUpdateValidationResult === false)
         throw new HttpError_1.HttpError(400, { message: "Invalid input from client side" });
     counter.currentCount = updatedCurrentCount;
@@ -61,18 +55,14 @@ const updateCount = (req, res, _) => __awaiter(void 0, void 0, void 0, function*
 });
 const resetCount = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { counterId } = req.params;
-    const counter = yield counter_1.default.findOne({ _id: counterId });
-    if (!counter)
-        throw new HttpError_1.HttpError(404, { message: "Counter not found" });
+    const counter = yield (0, utils_1.findCounter)(counterId);
     counter.currentCount = counter.startCount;
     yield counter.save();
     return res.status(201).json({ mesasge: "Reset count successfully" });
 });
 const updateAchievementStack = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { counterId } = req.params;
-    const counter = yield counter_1.default.findOne({ _id: counterId });
-    if (!counter)
-        throw new HttpError_1.HttpError(404, { message: "Counter not found" });
+    const counter = yield (0, utils_1.findCounter)(counterId);
     const { updatedAchievementStack } = req.body;
     if (updatedAchievementStack < 0)
         throw new HttpError_1.HttpError(400, { message: "Invalid input from client side" });
@@ -84,9 +74,7 @@ const updateAchievementStack = (req, res, _) => __awaiter(void 0, void 0, void 0
 });
 const resetAchievementStack = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { counterId } = req.params;
-    const counter = yield counter_1.default.findOne({ _id: counterId });
-    if (!counter)
-        throw new HttpError_1.HttpError(404, { message: "Counter not found" });
+    const counter = yield (0, utils_1.findCounter)(counterId);
     counter.achievementStack = 0;
     yield counter.save();
     return res

@@ -1,3 +1,5 @@
+// 버킷에 대한 모델 생성.
+
 import { Schema, model } from "mongoose";
 
 const bucketSchema = new Schema({

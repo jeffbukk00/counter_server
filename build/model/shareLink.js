@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// 공유 링크에 대한 모델 생성.
 const mongoose_1 = require("mongoose");
 const shareLinkSchema = new mongoose_1.Schema({
     bucket: {

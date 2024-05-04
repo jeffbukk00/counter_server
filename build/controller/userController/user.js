@@ -8,18 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_1 = __importDefault(require("@/model/user"));
 const errorWrapper_1 = require("@/error/errorWrapper");
 const HttpError_1 = require("@/error/HttpError");
+const utils_1 = require("../utils");
+// 유저 데이터를 가져오는 역할을 하는 컨트롤러.
 const getUserData = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req;
-    const user = yield user_1.default.findOne({ _id: userId });
-    if (!user)
-        throw new HttpError_1.HttpError(404, { message: "User not found" });
+    // 데이터베이스로부터 유저 데이터를 쿼리하는 함수.
+    const user = yield (0, utils_1.findUser)(userId);
     return res.status(200).json({
         userData: {
             email: user.email,
@@ -29,19 +26,23 @@ const getUserData = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         },
     });
 });
+// 유저 프로필을 업데이트 하기 위한 컨트롤러. => 추후 업데이트 예정.
 // const updateUserProfile = (
 //   req: Request,
 //   res: Response,
 //   next: NextFunction
 // ) => {};
+// 유저 데이터 내 "unreadPositivePopupIds" 필드를 업데이트 하기 위한 컨트롤러.
 const updateUnreadPositivePopupIds = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId } = req;
     const { checkedPositivePopupId } = req.body;
+    // 요청의 body 내 "checkedPositivePopupId" 필드에 어떠한 값도 할당 되어 있지 않다면, 400 에러를 throw.
     if (!checkedPositivePopupId)
         throw new HttpError_1.HttpError(400, { message: "Request has no correct body" });
-    const user = yield user_1.default.findOne({ _id: userId });
-    if (!user)
-        throw new HttpError_1.HttpError(404, { message: "User not found" });
+    const { userId } = req;
+    // 데이터베이스로부터 유저 데이터를 쿼리하는 함수.
+    const user = yield (0, utils_1.findUser)(userId);
+    // 유저 데이터 내 'unreadPositivePopupIds' 필드의 배열 업데이트.
+    // 요청의 body로 전달 된 'checkedPositivePopupId'와 일치하는 요소를 기존 배열에서 제거.
     user.unreadPositivePopupIds = [...user.unreadPositivePopupIds].filter((e) => e !== checkedPositivePopupId);
     yield user.save();
     return res

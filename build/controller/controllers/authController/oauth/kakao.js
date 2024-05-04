@@ -1,0 +1,88 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const axios_1 = __importDefault(require("axios"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const user_1 = __importDefault(require("@/model/user"));
+const HttpError_1 = require("@/error/HttpError");
+const errorWrapper_1 = require("@/error/errorWrapper");
+const kakao_1 = require("@/config/authConfig/oauth/kakao");
+const token_1 = require("@/config/authConfig/token");
+const getOauthUrlKakao = (_, res) => {
+    res.json({
+        loginUrl: `${kakao_1.configKakao.authUrl}?${kakao_1.authParamsKakao}`,
+    });
+};
+const getAccessTokenKakao = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { code } = req.query;
+    if (!code)
+        throw new HttpError_1.HttpError(400, {
+            message: "Authorization code must be provided",
+        });
+    const tokenParam = (0, kakao_1.getTokenParamsKakao)(code);
+    const headers = {
+        headers: {
+            "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+        },
+    };
+    const { data: { access_token }, } = yield axios_1.default.post(`${kakao_1.configKakao.tokenUrl}?${tokenParam}`, { headers });
+    if (!access_token)
+        throw new HttpError_1.HttpError(400, { message: "Cannot get access token" });
+    req.accessToken = access_token;
+    return next();
+});
+const loginUsingKakaoOauth = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { accessToken } = req;
+    if (!accessToken)
+        throw new HttpError_1.HttpError(400, { message: "Cannot get access token" });
+    const headers = {
+        Authorization: "Bearer " + accessToken,
+        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+    };
+    const { data: { id, properties: { nickname: name, thumbnail_image: picture }, }, } = yield axios_1.default.get(kakao_1.configKakao.profileUrl, {
+        headers,
+    });
+    const snsId = id;
+    const exUser = yield user_1.default.findOne({ snsId, provider: "kakao" });
+    let userId;
+    if (exUser) {
+        userId = exUser.id;
+    }
+    else {
+        const newUser = new user_1.default({
+            email: "", // 앱 심사 필요
+            username: name,
+            profilePictureUrl: picture,
+            snsId,
+            provider: "kakao",
+            bucketIds: [],
+            unreadPositivePopupIds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+        });
+        yield newUser.save();
+        userId = newUser.id;
+    }
+    const token = jsonwebtoken_1.default.sign({ userId }, token_1.configJwtToken.tokenSecret, {
+        expiresIn: token_1.configJwtToken.tokenExpiration,
+    });
+    res.cookie("token", token, {
+        maxAge: token_1.configJwtToken.tokenExpiration * 1000,
+        httpOnly: true,
+    });
+    return res.status(201).json({ loggedIn: true });
+});
+exports.default = {
+    getOauthUrlKakao: (0, errorWrapper_1.errorWrapper)(getOauthUrlKakao),
+    getAccessTokenKakao: (0, errorWrapper_1.errorWrapper)(getAccessTokenKakao),
+    loginUsingKakaoOauth: (0, errorWrapper_1.errorWrapper)(loginUsingKakaoOauth),
+};

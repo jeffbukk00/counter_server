@@ -17,6 +17,7 @@ const bucket_1 = __importDefault(require("@/model/bucket"));
 const errorWrapper_1 = require("@/error/errorWrapper");
 const HttpError_1 = require("@/error/HttpError");
 const bucket_2 = require("@/validation/bucket");
+const utils_1 = require("../utils");
 const getBuckets = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req;
     const user = yield user_1.default.findOne({ _id: userId }).populate("bucketIds");
@@ -26,16 +27,12 @@ const getBuckets = (req, res, _) => __awaiter(void 0, void 0, void 0, function* 
 });
 const getBucketIds = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req;
-    const user = yield user_1.default.findOne({ _id: userId });
-    if (!user)
-        throw new HttpError_1.HttpError(404, { message: "User not found" });
+    const user = yield (0, utils_1.findUser)(userId);
     res.status(200).json({ bucketIds: user.bucketIds });
 });
 const createBucket = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req;
-    const user = yield user_1.default.findOne({ _id: userId });
-    if (!user)
-        throw new HttpError_1.HttpError(404, { message: "User not found" });
+    const user = yield (0, utils_1.findUser)(userId);
     const { error } = (0, bucket_2.bucketValidation)(req.body);
     if (error)
         throw new HttpError_1.HttpError(400, { message: error.details[0].message });
@@ -53,20 +50,15 @@ const createBucket = (req, res, _) => __awaiter(void 0, void 0, void 0, function
 });
 const duplicateBucket = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req;
-    const user = yield user_1.default.findOne({ _id: userId });
-    if (!user)
-        throw new HttpError_1.HttpError(404, { message: "User not found" });
+    const user = yield (0, utils_1.findUser)(userId);
     const { bucketId } = req.params;
-    const bucket = yield bucket_1.default.findOne({ _id: bucketId });
-    if (!bucket)
-        throw new HttpError_1.HttpError(404, { message: "Bucket not found" });
+    const bucket = yield (0, utils_1.findBucket)(bucketId);
     const duplicatedBucket = new bucket_1.default({
         title: bucket.title,
         counterIds: [],
         motivationTextIds: [],
         motivationLinkIds: [],
     });
-    yield duplicatedBucket.save();
     let updatedBucketIds = [...user.bucketIds];
     const idx = updatedBucketIds.findIndex((e) => e.toString() === bucketId);
     if (idx === -1)
@@ -76,22 +68,17 @@ const duplicateBucket = (req, res, _) => __awaiter(void 0, void 0, void 0, funct
     slicedBeforeIdx.push(duplicatedBucket._id);
     updatedBucketIds = [...slicedBeforeIdx, ...slicedAfterIdx];
     user.bucketIds = updatedBucketIds;
+    yield duplicatedBucket.save();
     yield user.save();
     return res.status(201).json({ message: "Duplicate bucket successfully" });
 });
 const mergeBuckets = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req;
-    const user = yield user_1.default.findOne({ _id: userId });
-    if (!user)
-        throw new HttpError_1.HttpError(404, { message: "User not found" });
+    const user = yield (0, utils_1.findUser)(userId);
     const { bucketIdSubject } = req.params;
     const { bucketIdObject } = req.body;
-    const bucketSubject = yield bucket_1.default.findOne({ _id: bucketIdSubject });
-    if (!bucketSubject)
-        throw new HttpError_1.HttpError(404, { message: "Subject bucket not found" });
-    const bucketObject = yield bucket_1.default.findOne({ _id: bucketIdObject });
-    if (!bucketObject)
-        throw new HttpError_1.HttpError(404, { message: "Object bucket not found" });
+    const bucketSubject = yield (0, utils_1.findBucket)(bucketIdSubject);
+    const bucketObject = yield (0, utils_1.findBucket)(bucketIdObject);
     bucketSubject.counterIds = [...bucketSubject.counterIds].concat([
         ...bucketObject.counterIds,
     ]);
@@ -105,11 +92,10 @@ const mergeBuckets = (req, res, _) => __awaiter(void 0, void 0, void 0, function
 });
 const removeBucket = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req;
-    const user = yield user_1.default.findOne({ _id: userId });
-    if (!user)
-        throw new HttpError_1.HttpError(404, { message: "User not found" });
     const { bucketId } = req.params;
-    yield bucket_1.default.deleteOne({ _id: bucketId });
+    const user = yield (0, utils_1.findUser)(userId);
+    const bucket = yield bucket_1.default.findOne({ _id: bucketId }).populate("counterIds");
+    yield (0, utils_1.removeBucketUtil)(Object.assign({}, bucket._doc));
     user.bucketIds = [...user.bucketIds].filter((e) => e.toString() !== bucketId);
     yield user.save();
     return res.status(201).json({ message: "Remove bucket successfully" });
