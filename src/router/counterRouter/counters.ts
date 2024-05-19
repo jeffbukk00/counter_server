@@ -10,6 +10,8 @@ import countersController from "@/controller/controllers/counterController/count
 // 버킷 내 존재하는 카운터들에 대한 id를 가져오는 경로.
 router.get("/:bucketId/ids", countersController.getCounterIds);
 
+router.post("/:bucketId/position", countersController.changeCounterPosition);
+
 // 카운터를 생성하는 경로.
 router.post("/:bucketId", countersController.createCounter);
 

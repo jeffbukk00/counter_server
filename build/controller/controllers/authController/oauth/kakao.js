@@ -67,7 +67,9 @@ const loginUsingKakaoOauth = (req, res) => __awaiter(void 0, void 0, void 0, fun
             snsId,
             provider: "kakao",
             bucketIds: [],
-            unreadPositivePopupIds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+            unreadGuideIds: new Array(12)
+                .fill(0)
+                .map((_, i) => "guideId" + (i + 1).toString()),
         });
         yield newUser.save();
         userId = newUser.id;

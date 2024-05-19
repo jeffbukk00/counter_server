@@ -9,6 +9,6 @@ const userSchema = new mongoose_1.Schema({
     snsId: String,
     provider: String,
     bucketIds: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Bucket" }],
-    unreadPositivePopupIds: [Number],
+    unreadGuideIds: [String],
 });
 exports.default = (0, mongoose_1.model)("User", userSchema);

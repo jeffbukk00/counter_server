@@ -1,5 +1,6 @@
 import User from "@/model/user";
 import Bucket from "@/model/bucket";
+import Counter from "@/model/counter";
 
 import { Request, Response, NextFunction } from "@/types/express";
 import { errorWrapper } from "@/error/errorWrapper";
@@ -12,12 +13,12 @@ import {
 } from "@/controller/controller-utils-shared/find";
 import { removeBucketUtil } from "@/controller/controller-utils-shared/remove";
 import { duplicateBucketUtil } from "@/controller/controller-utils-shared/duplicate";
-import counter from "@/model/counter";
 
 const getBuckets = async (req: Request, res: Response, _: NextFunction) => {
   const { userId } = req;
 
   const user = await User.findOne({ _id: userId }).populate("bucketIds");
+
   if (!user) throw new HttpError(404, { message: "User not found" });
 
   res.status(200).json({ buckets: user.bucketIds });
@@ -31,15 +32,34 @@ const getBucketIds = async (req: Request, res: Response, _: NextFunction) => {
   res.status(200).json({ bucketIds: user.bucketIds });
 };
 
+const changeBucketPosition = async (
+  req: Request,
+  res: Response,
+  _: NextFunction
+) => {
+  const { userId } = req;
+
+  const { bucketIds } = req.body;
+
+  const user = await findUser(userId);
+  user.bucketIds = bucketIds;
+  await user.save();
+
+  return res
+    .status(201)
+    .json({ message: "Change bucket's position successfully" });
+};
+
 const createBucket = async (req: Request, res: Response, _: NextFunction) => {
   const { userId } = req;
 
   const user = await findUser(userId);
 
-  const { error } = bucketValidation(req.body);
+  const { data } = req.body;
+  const { error } = bucketValidation(data);
   if (error) throw new HttpError(400, { message: error.details[0].message });
 
-  const { title } = req.body;
+  const { title } = data;
   const newBucket = new Bucket({
     title,
     counterIds: [],
@@ -66,8 +86,7 @@ const duplicateBucket = async (
   const { bucketId } = req.params;
 
   const bucket: any = await Bucket.findOne({ _id: bucketId }).populate(
-    "motivationTextIds motivationLinkIds",
-    "-_id"
+    "counterIds motivationTextIds motivationLinkIds"
   );
   if (!bucket) throw new HttpError(404, { message: "Bucket not found" });
 
@@ -77,9 +96,10 @@ const duplicateBucket = async (
     motivationLinks: bucket._doc.motivationLinkIds,
   };
 
-  const counters: any[] = await counter
-    .find({ _id: { $in: bucket.counterIds } })
-    .populate("motivationTextIds motivationLinkIds", "-_id");
+  const counters: any = await Counter.populate(
+    bucket.counterIds,
+    "motivationTextIds motivationLinkIds"
+  );
 
   const countersData = counters.map((e: any) => {
     return {
@@ -135,12 +155,12 @@ const mergeBuckets = async (req: Request, res: Response, _: NextFunction) => {
   );
 
   await bucketSubject.save();
-  await Bucket.deleteOne({ _id: bucketIdObject });
-
   user.bucketIds = [...user.bucketIds].filter(
     (e) => e.toString() !== bucketIdObject
   );
   await user.save();
+
+  await Bucket.deleteOne({ _id: bucketIdObject });
 
   return res.status(201).json({ message: "Merge buckets successfully" });
 };
@@ -165,6 +185,7 @@ const removeBucket = async (req: Request, res: Response, _: NextFunction) => {
 export default {
   getBuckets: errorWrapper(getBuckets),
   getBucketIds: errorWrapper(getBucketIds),
+  changeBucketPosition: errorWrapper(changeBucketPosition),
   createBucket: errorWrapper(createBucket),
   duplicateBucket: errorWrapper(duplicateBucket),
   mergeBuckets: errorWrapper(mergeBuckets),

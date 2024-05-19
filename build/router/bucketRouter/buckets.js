@@ -13,6 +13,7 @@ const buckets_1 = __importDefault(require("@/controller/controllers/bucketContro
 router.get("/", buckets_1.default.getBuckets);
 // 유저가 가진 버킷들의 id를 가져오기 위한 경로.
 router.get("/ids", buckets_1.default.getBucketIds);
+router.post("/position", buckets_1.default.changeBucketPosition);
 // 버킷을 생성하는 경로.
 router.post("/", buckets_1.default.createBucket);
 // 버킷을 복제하는 경로.

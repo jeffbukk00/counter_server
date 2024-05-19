@@ -12,7 +12,7 @@ const shareLink_1 = __importDefault(require("@/controller/controllers/shareLinkC
 // 공유 링크를 데이터베이스에 업로드(생성)하는 경로.
 router.post("/upload", shareLink_1.default.uploadShareLink);
 // 공유 링크로부터 버킷을 다운로드 하기 전, 이것의 유효성 및 안전성을 확인하기 위한 경로.
-router.get("/:shareLinkId/validation", shareLink_1.default.validateShareLink);
+router.post("/:shareLinkId/validation", shareLink_1.default.validateShareLink);
 // 공유 링크로부터 버킷을 다운로드 하는 경로.
 router.post("/:shareLinkId/download/:downloadType", shareLink_1.default.downloadShareLink);
 exports.default = router;

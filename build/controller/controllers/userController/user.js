@@ -22,7 +22,7 @@ const getUserData = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
             email: user.email,
             username: user.username,
             profilePictureUrl: user.profilePictureUrl,
-            unreadPositivePopupIds: user.unreadPositivePopupIds,
+            unreadGuideIds: user.unreadGuideIds,
         },
     });
 });
@@ -33,23 +33,21 @@ const getUserData = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
 //   next: NextFunction
 // ) => {};
 // "unreadPositivePopupIds" 필드를 업데이트 하기 위한 컨트롤러.
-const updateUnreadPositivePopupIds = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
-    const { checkedPositivePopupId } = req.body;
-    if (!checkedPositivePopupId)
+const updateUnreadGuideIds = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
+    const { checkedGuideId } = req.body;
+    if (!checkedGuideId)
         throw new HttpError_1.HttpError(400, { message: "Request has no correct body" });
     const { userId } = req;
     // 데이터베이스로부터 유저 데이터를 가져옴.
     const user = yield (0, find_1.findUser)(userId);
-    // 'unreadPositivePopupIds' 필드 업데이트.
-    // 'checkedPositivePopupId'와 일치하는 요소를 기존 배열에서 제거.
-    user.unreadPositivePopupIds = [...user.unreadPositivePopupIds].filter((e) => e !== checkedPositivePopupId);
+    user.unreadGuideIds = [...user.unreadGuideIds].filter((e) => e !== checkedGuideId);
     yield user.save();
     return res
         .status(201)
-        .json({ message: "Update unreadPositivePopupIds successfully" });
+        .json({ message: "Update unreadGuideIds successfully" });
 });
 exports.default = {
     getUserData: (0, errorWrapper_1.errorWrapper)(getUserData),
     // updateUserProfile: errorWrapper(updateUserProfile),
-    updateUnreadPositivePopupIds: (0, errorWrapper_1.errorWrapper)(updateUnreadPositivePopupIds),
+    updateUnreadGuideIds: (0, errorWrapper_1.errorWrapper)(updateUnreadGuideIds),
 };

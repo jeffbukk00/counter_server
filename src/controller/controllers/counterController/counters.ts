@@ -21,6 +21,24 @@ const getCounterIds = async (req: Request, res: Response, _: NextFunction) => {
   return res.status(200).json({ counterIds: bucket.counterIds });
 };
 
+const changeCounterPosition = async (
+  req: Request,
+  res: Response,
+  _: NextFunction
+) => {
+  const { bucketId } = req.params;
+
+  const { counterIds } = req.body;
+
+  const bucket = await findBucket(bucketId);
+  bucket.counterIds = counterIds;
+  await bucket.save();
+
+  return res
+    .status(201)
+    .json({ message: "Change counter's position successfully" });
+};
+
 const createCounter = async (req: Request, res: Response, _: NextFunction) => {
   const { bucketId } = req.params;
 
@@ -131,6 +149,7 @@ const removeCounter = async (req: Request, res: Response, _: NextFunction) => {
 
 export default {
   getCounterIds: errorWrapper(getCounterIds),
+  changeCounterPosition: errorWrapper(changeCounterPosition),
   createCounter: errorWrapper(createCounter),
   duplicateCounter: errorWrapper(duplicateCounter),
   moveCounter: errorWrapper(moveCounter),

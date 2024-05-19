@@ -9,7 +9,7 @@ const userSchema = new Schema({
   snsId: String,
   provider: String,
   bucketIds: [{ type: Schema.Types.ObjectId, ref: "Bucket" }],
-  unreadPositivePopupIds: [Number],
+  unreadGuideIds: [String],
 });
 
 export default model("User", userSchema);

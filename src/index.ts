@@ -7,7 +7,6 @@ dotenv.config();
 // ODM으로 mongoose 사용
 import mongoose from "mongoose";
 const MONGO_CONNECTION_URL = process.env.MONGO_CONNECTION_TEST_URL!;
-console.log(MONGO_CONNECTION_URL);
 mongoose
   .connect(MONGO_CONNECTION_URL)
   .then(() => console.log("Mongo connection is opened"))

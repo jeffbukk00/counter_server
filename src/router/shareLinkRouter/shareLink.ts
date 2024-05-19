@@ -11,7 +11,7 @@ import shareLinkController from "@/controller/controllers/shareLinkController/sh
 router.post("/upload", shareLinkController.uploadShareLink);
 
 // 공유 링크로부터 버킷을 다운로드 하기 전, 이것의 유효성 및 안전성을 확인하기 위한 경로.
-router.get("/:shareLinkId/validation", shareLinkController.validateShareLink);
+router.post("/:shareLinkId/validation", shareLinkController.validateShareLink);
 
 // 공유 링크로부터 버킷을 다운로드 하는 경로.
 router.post(

@@ -25,6 +25,16 @@ const getCounterIds = (req, res, _) => __awaiter(void 0, void 0, void 0, functio
     const bucket = yield (0, find_1.findBucket)(bucketId);
     return res.status(200).json({ counterIds: bucket.counterIds });
 });
+const changeCounterPosition = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
+    const { bucketId } = req.params;
+    const { counterIds } = req.body;
+    const bucket = yield (0, find_1.findBucket)(bucketId);
+    bucket.counterIds = counterIds;
+    yield bucket.save();
+    return res
+        .status(201)
+        .json({ message: "Change counter's position successfully" });
+});
 const createCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { bucketId } = req.params;
     const bucket = yield (0, find_1.findBucket)(bucketId);
@@ -102,6 +112,7 @@ const removeCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.default = {
     getCounterIds: (0, errorWrapper_1.errorWrapper)(getCounterIds),
+    changeCounterPosition: (0, errorWrapper_1.errorWrapper)(changeCounterPosition),
     createCounter: (0, errorWrapper_1.errorWrapper)(createCounter),
     duplicateCounter: (0, errorWrapper_1.errorWrapper)(duplicateCounter),
     moveCounter: (0, errorWrapper_1.errorWrapper)(moveCounter),

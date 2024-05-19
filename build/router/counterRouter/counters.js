@@ -11,6 +11,7 @@ const router = (0, express_1.Router)();
 const counters_1 = __importDefault(require("@/controller/controllers/counterController/counters"));
 // 버킷 내 존재하는 카운터들에 대한 id를 가져오는 경로.
 router.get("/:bucketId/ids", counters_1.default.getCounterIds);
+router.post("/:bucketId/position", counters_1.default.changeCounterPosition);
 // 카운터를 생성하는 경로.
 router.post("/:bucketId", counters_1.default.createCounter);
 // 카운터를 복제하는 경로.

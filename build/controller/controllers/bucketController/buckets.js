@@ -14,13 +14,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_1 = __importDefault(require("@/model/user"));
 const bucket_1 = __importDefault(require("@/model/bucket"));
+const counter_1 = __importDefault(require("@/model/counter"));
 const errorWrapper_1 = require("@/error/errorWrapper");
 const HttpError_1 = require("@/error/HttpError");
 const bucket_2 = require("@/validation/bucket");
 const find_1 = require("@/controller/controller-utils-shared/find");
 const remove_1 = require("@/controller/controller-utils-shared/remove");
 const duplicate_1 = require("@/controller/controller-utils-shared/duplicate");
-const counter_1 = __importDefault(require("@/model/counter"));
 const getBuckets = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req;
     const user = yield user_1.default.findOne({ _id: userId }).populate("bucketIds");
@@ -33,13 +33,24 @@ const getBucketIds = (req, res, _) => __awaiter(void 0, void 0, void 0, function
     const user = yield (0, find_1.findUser)(userId);
     res.status(200).json({ bucketIds: user.bucketIds });
 });
+const changeBucketPosition = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req;
+    const { bucketIds } = req.body;
+    const user = yield (0, find_1.findUser)(userId);
+    user.bucketIds = bucketIds;
+    yield user.save();
+    return res
+        .status(201)
+        .json({ message: "Change bucket's position successfully" });
+});
 const createBucket = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req;
     const user = yield (0, find_1.findUser)(userId);
-    const { error } = (0, bucket_2.bucketValidation)(req.body);
+    const { data } = req.body;
+    const { error } = (0, bucket_2.bucketValidation)(data);
     if (error)
         throw new HttpError_1.HttpError(400, { message: error.details[0].message });
-    const { title } = req.body;
+    const { title } = data;
     const newBucket = new bucket_1.default({
         title,
         counterIds: [],
@@ -55,7 +66,7 @@ const duplicateBucket = (req, res, _) => __awaiter(void 0, void 0, void 0, funct
     const { userId } = req;
     const user = yield (0, find_1.findUser)(userId);
     const { bucketId } = req.params;
-    const bucket = yield bucket_1.default.findOne({ _id: bucketId }).populate("motivationTextIds motivationLinkIds", "-_id");
+    const bucket = yield bucket_1.default.findOne({ _id: bucketId }).populate("counterIds motivationTextIds motivationLinkIds");
     if (!bucket)
         throw new HttpError_1.HttpError(404, { message: "Bucket not found" });
     const bucketData = {
@@ -63,9 +74,7 @@ const duplicateBucket = (req, res, _) => __awaiter(void 0, void 0, void 0, funct
         motivationTexts: bucket._doc.motivationTextIds,
         motivationLinks: bucket._doc.motivationLinkIds,
     };
-    const counters = yield counter_1.default
-        .find({ _id: { $in: bucket.counterIds } })
-        .populate("motivationTextIds motivationLinkIds", "-_id");
+    const counters = yield counter_1.default.populate(bucket.counterIds, "motivationTextIds motivationLinkIds");
     const countersData = counters.map((e) => {
         return {
             title: e.title,
@@ -102,9 +111,9 @@ const mergeBuckets = (req, res, _) => __awaiter(void 0, void 0, void 0, function
     bucketSubject.motivationTextIds = [...bucketSubject.motivationTextIds].concat([...bucketObject.motivationTextIds]);
     bucketSubject.motivationLinkIds = [...bucketSubject.motivationLinkIds].concat([...bucketObject.motivationLinkIds]);
     yield bucketSubject.save();
-    yield bucket_1.default.deleteOne({ _id: bucketIdObject });
     user.bucketIds = [...user.bucketIds].filter((e) => e.toString() !== bucketIdObject);
     yield user.save();
+    yield bucket_1.default.deleteOne({ _id: bucketIdObject });
     return res.status(201).json({ message: "Merge buckets successfully" });
 });
 const removeBucket = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
@@ -120,6 +129,7 @@ const removeBucket = (req, res, _) => __awaiter(void 0, void 0, void 0, function
 exports.default = {
     getBuckets: (0, errorWrapper_1.errorWrapper)(getBuckets),
     getBucketIds: (0, errorWrapper_1.errorWrapper)(getBucketIds),
+    changeBucketPosition: (0, errorWrapper_1.errorWrapper)(changeBucketPosition),
     createBucket: (0, errorWrapper_1.errorWrapper)(createBucket),
     duplicateBucket: (0, errorWrapper_1.errorWrapper)(duplicateBucket),
     mergeBuckets: (0, errorWrapper_1.errorWrapper)(mergeBuckets),

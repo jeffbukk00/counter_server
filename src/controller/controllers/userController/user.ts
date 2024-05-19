@@ -16,7 +16,7 @@ const getUserData = async (req: Request, res: Response, next: NextFunction) => {
       email: user.email,
       username: user.username,
       profilePictureUrl: user.profilePictureUrl,
-      unreadPositivePopupIds: user.unreadPositivePopupIds,
+      unreadGuideIds: user.unreadGuideIds,
     },
   });
 };
@@ -29,34 +29,32 @@ const getUserData = async (req: Request, res: Response, next: NextFunction) => {
 // ) => {};
 
 // "unreadPositivePopupIds" 필드를 업데이트 하기 위한 컨트롤러.
-const updateUnreadPositivePopupIds = async (
+const updateUnreadGuideIds = async (
   req: Request,
   res: Response,
   _: NextFunction
 ) => {
-  const { checkedPositivePopupId } = req.body;
+  const { checkedGuideId } = req.body;
 
-  if (!checkedPositivePopupId)
+  if (!checkedGuideId)
     throw new HttpError(400, { message: "Request has no correct body" });
 
   const { userId } = req;
   // 데이터베이스로부터 유저 데이터를 가져옴.
   const user = await findUser(userId);
 
-  // 'unreadPositivePopupIds' 필드 업데이트.
-  // 'checkedPositivePopupId'와 일치하는 요소를 기존 배열에서 제거.
-  user.unreadPositivePopupIds = [...user.unreadPositivePopupIds].filter(
-    (e) => e !== checkedPositivePopupId
+  user.unreadGuideIds = [...user.unreadGuideIds].filter(
+    (e) => e !== checkedGuideId
   );
   await user.save();
 
   return res
     .status(201)
-    .json({ message: "Update unreadPositivePopupIds successfully" });
+    .json({ message: "Update unreadGuideIds successfully" });
 };
 
 export default {
   getUserData: errorWrapper(getUserData),
   // updateUserProfile: errorWrapper(updateUserProfile),
-  updateUnreadPositivePopupIds: errorWrapper(updateUnreadPositivePopupIds),
+  updateUnreadGuideIds: errorWrapper(updateUnreadGuideIds),
 };

@@ -23,16 +23,14 @@ const uploadShareLink = async (
 
   // 공유할 버킷을 데이터베이스로부터 가져옴.
   const bucket = await Bucket.findOne({ _id: bucketId }).populate(
-    "motivationTextIds motivationLinkIds",
-    "-_id"
+    "counterIds motivationTextIds motivationLinkIds"
   );
   if (!bucket) throw new HttpError(404, { message: "Bucket not found" });
 
   // 공유할 버킷 내에 존재하는 카운터들을 데이터베이스로부터 가져옴.
-  const counterIds = bucket.counterIds;
-  const counters = await Counter.find({ _id: { $in: counterIds } }).populate(
-    "motivationTextIds motivationLinkIds",
-    "-_id"
+  const counters = await Counter.populate(
+    bucket.counterIds,
+    "motivationTextIds motivationLinkIds"
   );
 
   // 위에서 가져온 데이터들을 바탕으로, 공유 링크 생성 및 저장.

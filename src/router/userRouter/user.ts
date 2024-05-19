@@ -15,8 +15,8 @@ router.get("/user-data", userController.getUserData);
 
 // 유저 데이터 내 "unreadPositivePopupIds" 필드를 업데이트 하는 경로.
 router.patch(
-  "/user-data/unread-positive-popup-ids",
-  userController.updateUnreadPositivePopupIds
+  "/user-data/unread-guide-ids",
+  userController.updateUnreadGuideIds
 );
 
 export default router;

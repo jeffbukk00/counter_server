@@ -25,12 +25,11 @@ const uploadShareLink = (req, res, _) => __awaiter(void 0, void 0, void 0, funct
     const { userId } = req;
     const { bucketId } = req.body;
     // 공유할 버킷을 데이터베이스로부터 가져옴.
-    const bucket = yield bucket_1.default.findOne({ _id: bucketId }).populate("motivationTextIds motivationLinkIds", "-_id");
+    const bucket = yield bucket_1.default.findOne({ _id: bucketId }).populate("counterIds motivationTextIds motivationLinkIds");
     if (!bucket)
         throw new HttpError_1.HttpError(404, { message: "Bucket not found" });
     // 공유할 버킷 내에 존재하는 카운터들을 데이터베이스로부터 가져옴.
-    const counterIds = bucket.counterIds;
-    const counters = yield counter_1.default.find({ _id: { $in: counterIds } }).populate("motivationTextIds motivationLinkIds", "-_id");
+    const counters = yield counter_1.default.populate(bucket.counterIds, "motivationTextIds motivationLinkIds");
     // 위에서 가져온 데이터들을 바탕으로, 공유 링크 생성 및 저장.
     const sharedBucket = {
         title: bucket.title,
