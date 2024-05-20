@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc --build",
+    "build": "tsc --build && node build/index.js",
     "dev:build": "tsc -w",
     "dev:run": "nodemon --exec ts-node -r tsconfig-paths/register  src/index.ts",
     "dev": "concurrently npm:dev:*"
