@@ -86,7 +86,9 @@ const loginUsingGoogleOauth = async (req: Request, res: Response) => {
 
   res.cookie("token", token, {
     maxAge: configJwtToken.tokenExpiration * 1000,
-    httpOnly: true,
+    httpOnly: false,
+    secure: true,
+    sameSite: "none",
   });
   return res.status(201).json({ loggedIn: true });
 };

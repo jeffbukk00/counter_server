@@ -9,10 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const errorWrapper_1 = require("@/error/errorWrapper");
-const HttpError_1 = require("@/error/HttpError");
-const motivation_1 = require("@/validation/motivation");
-const motivation_2 = require("@/controller/controllers/motivationController/controller-utils-not-shared/motivation");
+const errorWrapper_1 = require("../../../error/errorWrapper");
+const HttpError_1 = require("../../../error/HttpError");
+const motivation_1 = require("../../../validation/motivation");
+const motivation_2 = require("../../../controller/controllers/motivationController/controller-utils-not-shared/motivation");
 // 단일 모티베이션 텍스트를 가져오는 컨트롤러.
 const getMotivationText = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { motivationTextId } = req.params;

@@ -7,7 +7,7 @@ exports.countUpdateValidation = exports.counterEditValidation = exports.counterV
 // 유효성 검사를 위한 라이브러리.
 const joi_1 = __importDefault(require("joi"));
 // 카운터와 관련된 상수들.
-const counter_1 = __importDefault(require("@/constants/counter"));
+const counter_1 = __importDefault(require("../constants/counter"));
 // 버킷 생성 및 편집에 대한 유효성 검사를 위한 스키마 설정.
 //  1. "title" 필드 => 타입 string / 15자 이하 / 필수 입력
 //  2. "startCount" 필드 => 타입 number / 최소 0 / 최대 999,999 / 필수 입력

@@ -13,11 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.duplicateBucketUtil = exports.duplicateCounterUtil = exports.insertMotivationLinks = exports.insertMotivationTexts = void 0;
-const bucket_1 = __importDefault(require("@/model/bucket"));
-const counter_1 = __importDefault(require("@/model/counter"));
-const motivationText_1 = __importDefault(require("@/model/motivation/motivationText"));
-const motivationLink_1 = __importDefault(require("@/model/motivation/motivationLink"));
-const shared_1 = __importDefault(require("@/constants/shared"));
+const bucket_1 = __importDefault(require("../../model/bucket"));
+const counter_1 = __importDefault(require("../../model/counter"));
+const motivationText_1 = __importDefault(require("../../model/motivation/motivationText"));
+const motivationLink_1 = __importDefault(require("../../model/motivation/motivationLink"));
+const shared_1 = __importDefault(require("../../constants/shared"));
 const insertMotivationTexts = (motivationTexts) => __awaiter(void 0, void 0, void 0, function* () {
     const insertedMotivationTexts = yield motivationText_1.default.insertMany(motivationTexts.map((e) => {
         return { text: e.text };

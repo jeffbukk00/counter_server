@@ -8,7 +8,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const router = (0, express_1.Router)();
 // 해당 라우터에 대한 컨트롤러들.
-const google_1 = __importDefault(require("@/controller/controllers/authController/oauth/google"));
+const google_1 = __importDefault(require("../../../controller/controllers/authController/oauth/google"));
 // 유저 동의 페이지에 대한 URL을 가져오는 경로.
 // "이 어플리케이션에 구글 아이디로 로그인할 것인지 및 명시된 개인정보들을 제공하는데 동의 하는지"에 대한 유저 동의 페이지.
 router.get("/oauth/url/google", google_1.default.getOauthUrlGoogle);

@@ -14,11 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_1 = __importDefault(require("@/model/user"));
-const HttpError_1 = require("@/error/HttpError");
-const errorWrapper_1 = require("@/error/errorWrapper");
-const naver_1 = require("@/config/authConfig/oauth/naver");
-const token_1 = require("@/config/authConfig/token");
+const user_1 = __importDefault(require("../../../../model/user"));
+const HttpError_1 = require("../../../../error/HttpError");
+const errorWrapper_1 = require("../../../../error/errorWrapper");
+const naver_1 = require("../../../../config/authConfig/oauth/naver");
+const token_1 = require("../../../../config/authConfig/token");
 const getOauthUrlNaver = (_, res) => {
     res.json({
         loginUrl: `${naver_1.configNaver.authUrl}?${naver_1.authParamsNaver}`,

@@ -8,7 +8,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const router = (0, express_1.Router)();
 // 해당 라우터에 대한 컨트롤러들.
-const user_1 = __importDefault(require("@/controller/controllers/userController/user"));
+const user_1 = __importDefault(require("../../controller/controllers/userController/user"));
 // 유저 데이터를 가져오는 경로.
 router.get("/user-data", user_1.default.getUserData);
 // 유저 프로필을 업데이트하는 경로. => 추후 업데이트 예정.

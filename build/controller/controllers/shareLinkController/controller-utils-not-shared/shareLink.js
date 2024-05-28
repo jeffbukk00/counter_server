@@ -13,8 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findShareLink = void 0;
-const shareLink_1 = __importDefault(require("@/model/shareLink"));
-const HttpError_1 = require("@/error/HttpError");
+const shareLink_1 = __importDefault(require("../../../../model/shareLink"));
+const HttpError_1 = require("../../../../error/HttpError");
 // 공유 링크를 데이터베이스로부터 가져오는 함수.
 const findShareLink = (shareLinkId, errorResponse) => __awaiter(void 0, void 0, void 0, function* () {
     const shareLink = yield shareLink_1.default.findOne({ _id: shareLinkId });

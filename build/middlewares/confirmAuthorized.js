@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // 접근 권한을 확인하는 인증 토큰으로 사용할 라이브러리.
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const HttpError_1 = require("@/error/HttpError");
-const errorWrapper_1 = require("@/error/errorWrapper");
-const token_1 = require("@/config/authConfig/token");
+const HttpError_1 = require("../error/HttpError");
+const errorWrapper_1 = require("../error/errorWrapper");
+const token_1 = require("../config/authConfig/token");
 // 접근 권한을 확인하는 미들웨어.
 const confirmAuthorized = (req, _, next) => {
     const token = req.cookies.token;

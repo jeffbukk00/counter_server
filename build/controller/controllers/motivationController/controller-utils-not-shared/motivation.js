@@ -13,9 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findMotivationLink = exports.findMotivationText = void 0;
-const motivationText_1 = __importDefault(require("@/model/motivation/motivationText"));
-const motivationLink_1 = __importDefault(require("@/model/motivation/motivationLink"));
-const HttpError_1 = require("@/error/HttpError");
+const motivationText_1 = __importDefault(require("../../../../model/motivation/motivationText"));
+const motivationLink_1 = __importDefault(require("../../../../model/motivation/motivationLink"));
+const HttpError_1 = require("../../../../error/HttpError");
 // 모티베이션 텍스트를 가져오는 함수.
 const findMotivationText = (motivationTextId) => __awaiter(void 0, void 0, void 0, function* () {
     const motivationText = yield motivationText_1.default.findOne({

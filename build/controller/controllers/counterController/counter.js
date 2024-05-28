@@ -12,11 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const errorWrapper_1 = require("@/error/errorWrapper");
-const HttpError_1 = require("@/error/HttpError");
-const counter_1 = require("@/validation/counter");
-const counter_2 = __importDefault(require("@/constants/counter"));
-const find_1 = require("@/controller/controller-utils-shared/find");
+const errorWrapper_1 = require("../../../error/errorWrapper");
+const HttpError_1 = require("../../../error/HttpError");
+const counter_1 = require("../../../validation/counter");
+const counter_2 = __importDefault(require("../../../constants/counter"));
+const find_1 = require("../../../controller/controller-utils-shared/find");
 const getCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { counterId } = req.params;
     const counter = yield (0, find_1.findCounter)(counterId);

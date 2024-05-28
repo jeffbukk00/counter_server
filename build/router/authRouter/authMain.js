@@ -8,7 +8,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const router = (0, express_1.Router)();
 // 해당 라우터에 대한 컨트롤러들.
-const authMain_1 = __importDefault(require("@/controller/controllers/authController/authMain"));
+const authMain_1 = __importDefault(require("../../controller/controllers/authController/authMain"));
 // 로그인 여부를 확인하는 경로.
 router.get("/logged-in", authMain_1.default.checkLoggedIn);
 // 로그아웃을 하기 위한 경로.

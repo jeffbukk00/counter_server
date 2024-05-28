@@ -10,7 +10,7 @@ dotenv_1.default.config();
 // 데이터베이스 연결
 // ODM으로 mongoose 사용
 const mongoose_1 = __importDefault(require("mongoose"));
-const MONGO_CONNECTION_URL = process.env.MONGO_CONNECTION_TEST_URL;
+const MONGO_CONNECTION_URL = process.env.MONGO_CONNECTION_URL;
 mongoose_1.default
     .connect(MONGO_CONNECTION_URL)
     .then(() => console.log("Mongo connection is opened"))
@@ -33,25 +33,25 @@ app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
 // 모든 라우터들 임포트.
-const authMain_1 = __importDefault(require("@/router/authRouter/authMain"));
-const google_1 = __importDefault(require("@/router/authRouter/oauthRouter/google"));
-const kakao_1 = __importDefault(require("@/router/authRouter/oauthRouter/kakao"));
-const naver_1 = __importDefault(require("@/router/authRouter/oauthRouter/naver"));
-const user_1 = __importDefault(require("@/router/userRouter/user"));
-const buckets_1 = __importDefault(require("@/router/bucketRouter/buckets"));
-const bucket_1 = __importDefault(require("@/router/bucketRouter/bucket"));
-const counters_1 = __importDefault(require("@/router/counterRouter/counters"));
-const counter_1 = __importDefault(require("@/router/counterRouter/counter"));
-const motivationsTexts_1 = __importDefault(require("@/router/motivationRouter/motivationsTexts"));
-const motivationText_1 = __importDefault(require("@/router/motivationRouter/motivationText"));
-const motivationLinks_1 = __importDefault(require("@/router/motivationRouter/motivationLinks"));
-const motivationLink_1 = __importDefault(require("@/router/motivationRouter/motivationLink"));
-const shareLink_1 = __importDefault(require("@/router/shareLinkRouter/shareLink"));
+const authMain_1 = __importDefault(require("./router/authRouter/authMain"));
+const google_1 = __importDefault(require("./router/authRouter/oauthRouter/google"));
+const kakao_1 = __importDefault(require("./router/authRouter/oauthRouter/kakao"));
+const naver_1 = __importDefault(require("./router/authRouter/oauthRouter/naver"));
+const user_1 = __importDefault(require("./router/userRouter/user"));
+const buckets_1 = __importDefault(require("./router/bucketRouter/buckets"));
+const bucket_1 = __importDefault(require("./router/bucketRouter/bucket"));
+const counters_1 = __importDefault(require("./router/counterRouter/counters"));
+const counter_1 = __importDefault(require("./router/counterRouter/counter"));
+const motivationsTexts_1 = __importDefault(require("./router/motivationRouter/motivationsTexts"));
+const motivationText_1 = __importDefault(require("./router/motivationRouter/motivationText"));
+const motivationLinks_1 = __importDefault(require("./router/motivationRouter/motivationLinks"));
+const motivationLink_1 = __importDefault(require("./router/motivationRouter/motivationLink"));
+const shareLink_1 = __importDefault(require("./router/shareLinkRouter/shareLink"));
 // 유저 인증에 대한 라우터
 app.use("/auth", authMain_1.default, google_1.default, kakao_1.default, naver_1.default);
 // 접근 권한을 확인하는 미들웨어.
 // 위의 유저 인증에 대한 라우터를 제외하고는 전부 이를 거침.
-const confirmAuthorized_1 = __importDefault(require("@/middlewares/confirmAuthorized"));
+const confirmAuthorized_1 = __importDefault(require("./middlewares/confirmAuthorized"));
 app.use("/", confirmAuthorized_1.default);
 // 유저에 대한 라우터.
 app.use("/user", user_1.default);

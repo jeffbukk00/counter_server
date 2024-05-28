@@ -9,9 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const errorWrapper_1 = require("@/error/errorWrapper");
-const HttpError_1 = require("@/error/HttpError");
-const find_1 = require("@/controller/controller-utils-shared/find");
+const errorWrapper_1 = require("../../../error/errorWrapper");
+const HttpError_1 = require("../../../error/HttpError");
+const find_1 = require("../../../controller/controller-utils-shared/find");
 // 유저 데이터를 가져오는 역할을 하는 컨트롤러.
 const getUserData = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req;
