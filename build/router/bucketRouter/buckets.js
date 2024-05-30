@@ -8,7 +8,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const router = (0, express_1.Router)();
 // 해당 라우터에 대한 컨트롤러들.
-const buckets_1 = __importDefault(require("../../controller/controllers/bucketController/buckets"));
+const buckets_1 = __importDefault(require("@/controller/controllers/bucketController/buckets"));
 // 유저가 가진 버킷들을 가져오기 위한 경로.
 router.get("/", buckets_1.default.getBuckets);
 // 유저가 가진 버킷들의 id를 가져오기 위한 경로.

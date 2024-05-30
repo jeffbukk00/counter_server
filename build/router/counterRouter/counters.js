@@ -8,7 +8,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const router = (0, express_1.Router)();
 // 해당 라우터에 대한 컨트롤러들.
-const counters_1 = __importDefault(require("../../controller/controllers/counterController/counters"));
+const counters_1 = __importDefault(require("@/controller/controllers/counterController/counters"));
 // 버킷 내 존재하는 카운터들에 대한 id를 가져오는 경로.
 router.get("/:bucketId/ids", counters_1.default.getCounterIds);
 router.post("/:bucketId/position", counters_1.default.changeCounterPosition);

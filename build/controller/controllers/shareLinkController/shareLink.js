@@ -12,14 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_1 = __importDefault(require("../../../model/user"));
-const bucket_1 = __importDefault(require("../../../model/bucket"));
-const counter_1 = __importDefault(require("../../../model/counter"));
-const shareLink_1 = __importDefault(require("../../../model/shareLink"));
-const errorWrapper_1 = require("../../../error/errorWrapper");
-const HttpError_1 = require("../../../error/HttpError");
-const duplicate_1 = require("../../../controller/controller-utils-shared/duplicate");
-const shareLink_2 = require("../../../controller/controllers/shareLinkController/controller-utils-not-shared/shareLink");
+const user_1 = __importDefault(require("@/model/user"));
+const bucket_1 = __importDefault(require("@/model/bucket"));
+const counter_1 = __importDefault(require("@/model/counter"));
+const shareLink_1 = __importDefault(require("@/model/shareLink"));
+const errorWrapper_1 = require("@/error/errorWrapper");
+const HttpError_1 = require("@/error/HttpError");
+const duplicate_1 = require("@/controller/controller-utils-shared/duplicate");
+const shareLink_2 = require("@/controller/controllers/shareLinkController/controller-utils-not-shared/shareLink");
 // 공유 링크를 데이터베이스에 업로드(생성)하기 위한 컨트롤러.
 const uploadShareLink = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req;

@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logout = exports.checkLoggedIn = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const errorWrapper_1 = require("../../../error/errorWrapper");
-const HttpError_1 = require("../../../error/HttpError");
-const token_1 = require("../../../config/authConfig/token");
+const errorWrapper_1 = require("@/error/errorWrapper");
+const HttpError_1 = require("@/error/HttpError");
+const token_1 = require("@/config/authConfig/token");
 const checkLoggedIn = (req, res) => {
     try {
         const token = req.cookies.token;
@@ -19,17 +19,23 @@ const checkLoggedIn = (req, res) => {
         });
         res.cookie("token", newToken, {
             maxAge: token_1.configJwtToken.tokenExpiration * 1000,
-            httpOnly: true,
+            httpOnly: false,
+            secure: true,
+            sameSite: "none",
         });
         res.status(200).json({ loggedIn: true });
     }
     catch (err) {
+        console.log(err);
         throw new HttpError_1.HttpError(400, { loggedIn: false });
     }
 };
 exports.checkLoggedIn = checkLoggedIn;
-const logout = (_, res) => {
-    res.clearCookie("token").status(201).json({ message: "Logged out" });
+const logout = (req, res) => {
+    res
+        .clearCookie("token", { httpOnly: false, secure: true, sameSite: "none" })
+        .status(201)
+        .json({ message: "Logged out" });
 };
 exports.logout = logout;
 exports.default = {

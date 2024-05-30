@@ -12,14 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const counter_1 = __importDefault(require("../../../model/counter"));
-const errorWrapper_1 = require("../../../error/errorWrapper");
-const HttpError_1 = require("../../../error/HttpError");
-const counter_2 = require("../../../validation/counter");
-const counter_3 = __importDefault(require("../../../constants/counter"));
-const find_1 = require("../../../controller/controller-utils-shared/find");
-const remove_1 = require("../../../controller/controller-utils-shared/remove");
-const duplicate_1 = require("../../../controller/controller-utils-shared/duplicate");
+const counter_1 = __importDefault(require("@/model/counter"));
+const errorWrapper_1 = require("@/error/errorWrapper");
+const HttpError_1 = require("@/error/HttpError");
+const counter_2 = require("@/validation/counter");
+const counter_3 = __importDefault(require("@/constants/counter"));
+const find_1 = require("@/controller/controller-utils-shared/find");
+const remove_1 = require("@/controller/controller-utils-shared/remove");
+const duplicate_1 = require("@/controller/controller-utils-shared/duplicate");
 const getCounterIds = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { bucketId } = req.params;
     const bucket = yield (0, find_1.findBucket)(bucketId);

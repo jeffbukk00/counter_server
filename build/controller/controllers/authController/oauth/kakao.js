@@ -14,11 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_1 = __importDefault(require("../../../../model/user"));
-const HttpError_1 = require("../../../../error/HttpError");
-const errorWrapper_1 = require("../../../../error/errorWrapper");
-const kakao_1 = require("../../../../config/authConfig/oauth/kakao");
-const token_1 = require("../../../../config/authConfig/token");
+const user_1 = __importDefault(require("@/model/user"));
+const HttpError_1 = require("@/error/HttpError");
+const errorWrapper_1 = require("@/error/errorWrapper");
+const kakao_1 = require("@/config/authConfig/oauth/kakao");
+const token_1 = require("@/config/authConfig/token");
 const getOauthUrlKakao = (_, res) => {
     res.json({
         loginUrl: `${kakao_1.configKakao.authUrl}?${kakao_1.authParamsKakao}`,
@@ -79,7 +79,9 @@ const loginUsingKakaoOauth = (req, res) => __awaiter(void 0, void 0, void 0, fun
     });
     res.cookie("token", token, {
         maxAge: token_1.configJwtToken.tokenExpiration * 1000,
-        httpOnly: true,
+        httpOnly: false,
+        secure: true,
+        sameSite: "none",
     });
     return res.status(201).json({ loggedIn: true });
 });

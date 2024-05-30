@@ -8,7 +8,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const router = (0, express_1.Router)();
 // 해당 라우터에 대한 컨트롤러들.
-const counter_1 = __importDefault(require("../../controller/controllers/counterController/counter"));
+const counter_1 = __importDefault(require("@/controller/controllers/counterController/counter"));
 // 단일 카운터를 가져오는 경로.
 router.get("/:counterId", counter_1.default.getCounter);
 // 카운터를 수정하는 경로.

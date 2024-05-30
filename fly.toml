@@ -10,15 +10,19 @@ primary_region = 'nrt'
 
 [env]
   PORT='3000'
-  MONGO_CONNECTION_TEST_URL='mongodb://127.0.0.1:27017/counter_server_test'
-  MONGO_CONNECTION_URL='mongodb+srv://jeffbukk00:MOKFLAe4i036i9nO@counter.1mebdj9.mongodb.net/counter?retryWrites=true&w=majority&appName=counter'
-  CLIENT_HOST='https://www.counter.today'
+  MONGO_CONNECTION_LOCAL='mongodb://127.0.0.1:27017/counter_server_test'
+  MONGO_CONNECTION_CLUSTER='mongodb+srv://jeffbukk00:MOKFLAe4i036i9nO@counter.1mebdj9.mongodb.net/counter?retryWrites=true&w=majority&appName=counter'
+  CLIENT_HOST_PROD='https://www.counter.today'
+  CLIENT_HOST_DEV='http://localhost:5173'
   OAUTH_GOOGLE_CLIENT_ID='241159883621-rki5592haaf1bhmcqi5afjkah1ab3sd9.apps.googleusercontent.com'
-  OAUTH_GOOGLE_REDIRECT_URL='https://www.counter.today/landing/auth/callback/google'
+  OAUTH_GOOGLE_REDIRECT_URL_PROD='https://www.counter.today/landing/auth/callback/google'
+  OAUTH_GOOGLE_REDIRECT_URL_DEV='http://localhost:5173/landing/auth/callback/google'
   OAUTH_NAVER_CLIENT_ID='sL8pJDTCAElM5Y2xomLK'
-  OAUTH_NAVER_REDIRECT_URL='https://www.counter.today/landing/auth/callback/naver'
+  OAUTH_NAVER_REDIRECT_URL_PROD='https://www.counter.today/landing/auth/callback/naver'
+  OAUTH_NAVER_REDIRECT_URL_DEV='http://localhost:5173/landing/auth/callback/naver'
   OAUTH_KAKAO_CLIENT_ID='e5bc8f070efdb827aba5007583860ee8'
-  OAUTH_KAKAO_REDIRECT_URL='https://www.counter.today/landing/auth/callback/kakao'
+  OAUTH_KAKAO_REDIRECT_URL_PROD='https://www.counter.today/landing/auth/callback/kakao'
+  OAUTH_KAKAO_REDIRECT_URL_DEV='http://localhost:5173/landing/auth/callback/kakao'
 
 [http_service]
   internal_port = 3000

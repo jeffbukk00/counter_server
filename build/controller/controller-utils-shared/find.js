@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findCounter = exports.findBucket = exports.findUser = void 0;
-const user_1 = __importDefault(require("../../model/user"));
-const bucket_1 = __importDefault(require("../../model/bucket"));
-const counter_1 = __importDefault(require("../../model/counter"));
-const HttpError_1 = require("../../error/HttpError");
+const user_1 = __importDefault(require("@/model/user"));
+const bucket_1 = __importDefault(require("@/model/bucket"));
+const counter_1 = __importDefault(require("@/model/counter"));
+const HttpError_1 = require("@/error/HttpError");
 const findUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     // 요청한 유저의 user id에 해당 되는 유저를 데이터베이스로부터 가져옴.
     const user = yield user_1.default.findOne({ _id: userId });

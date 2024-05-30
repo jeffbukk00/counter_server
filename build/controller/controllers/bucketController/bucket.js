@@ -9,10 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const errorWrapper_1 = require("../../../error/errorWrapper");
-const HttpError_1 = require("../../../error/HttpError");
-const bucket_1 = require("../../../validation/bucket");
-const find_1 = require("../../../controller/controller-utils-shared/find");
+const errorWrapper_1 = require("@/error/errorWrapper");
+const HttpError_1 = require("@/error/HttpError");
+const bucket_1 = require("@/validation/bucket");
+const find_1 = require("@/controller/controller-utils-shared/find");
 const getBucket = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { bucketId } = req.params;
     const bucket = yield (0, find_1.findBucket)(bucketId);

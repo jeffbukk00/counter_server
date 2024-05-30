@@ -12,15 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_1 = __importDefault(require("../../../model/user"));
-const bucket_1 = __importDefault(require("../../../model/bucket"));
-const counter_1 = __importDefault(require("../../../model/counter"));
-const errorWrapper_1 = require("../../../error/errorWrapper");
-const HttpError_1 = require("../../../error/HttpError");
-const bucket_2 = require("../../../validation/bucket");
-const find_1 = require("../../../controller/controller-utils-shared/find");
-const remove_1 = require("../../../controller/controller-utils-shared/remove");
-const duplicate_1 = require("../../../controller/controller-utils-shared/duplicate");
+const user_1 = __importDefault(require("@/model/user"));
+const bucket_1 = __importDefault(require("@/model/bucket"));
+const counter_1 = __importDefault(require("@/model/counter"));
+const errorWrapper_1 = require("@/error/errorWrapper");
+const HttpError_1 = require("@/error/HttpError");
+const bucket_2 = require("@/validation/bucket");
+const find_1 = require("@/controller/controller-utils-shared/find");
+const remove_1 = require("@/controller/controller-utils-shared/remove");
+const duplicate_1 = require("@/controller/controller-utils-shared/duplicate");
 const getBuckets = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req;
     const user = yield user_1.default.findOne({ _id: userId }).populate("bucketIds");

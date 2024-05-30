@@ -1,9 +1,24 @@
 import queryString from "query-string";
 
+const getNaverRedirectUri = () => {
+  const mode = process.env.NODE_ENV;
+
+  const dev = process.env.OAUTH_NAVER_REDIRECT_URL_DEV;
+  const prod = process.env.OAUTH_NAVER_REDIRECT_URL_PROD;
+
+  if (mode === "development") {
+    return dev;
+  } else if (mode === "production") {
+    return prod;
+  } else {
+    return dev;
+  }
+};
+
 export const configNaver = {
   clientId: process.env.OAUTH_NAVER_CLIENT_ID!,
   clientSecret: process.env.OAUTH_NAVER_CLIENT_SECRET!,
-  redirectUrl: process.env.OAUTH_NAVER_REDIRECT_URL!,
+  redirectUrl: getNaverRedirectUri()!,
   authUrl: "https://nid.naver.com/oauth2.0/authorize",
   tokenUrl: "https://nid.naver.com/oauth2.0/token",
   profileUrl: "https://openapi.naver.com/v1/nid/me",

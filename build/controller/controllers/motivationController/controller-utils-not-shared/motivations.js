@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findBox = exports.validateBoxType = void 0;
-const bucket_1 = __importDefault(require("../../../../model/bucket"));
-const counter_1 = __importDefault(require("../../../../model/counter"));
-const HttpError_1 = require("../../../../error/HttpError");
-const motivation_1 = __importDefault(require("../../../../constants/motivation"));
+const bucket_1 = __importDefault(require("@/model/bucket"));
+const counter_1 = __importDefault(require("@/model/counter"));
+const HttpError_1 = require("@/error/HttpError");
+const motivation_1 = __importDefault(require("@/constants/motivation"));
 // 모티베이션들을 저장하는 박스의 타입(버킷 혹은 카운터) 판별하는 함수.
 const validateBoxType = (boxType) => {
     //  1. query string 내 "boxType" 필드가 비어 있지 않은지.

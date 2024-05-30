@@ -3,12 +3,15 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import { CLIENT_HOST } from "./constants/client";
+
 // 데이터베이스 연결
 // ODM으로 mongoose 사용
 import mongoose from "mongoose";
-const MONGO_CONNECTION_URL = process.env.MONGO_CONNECTION_URL!;
+import { MONGO_CONNECTION_URL } from "./constants/db";
+
 mongoose
-  .connect(MONGO_CONNECTION_URL)
+  .connect(MONGO_CONNECTION_URL!)
   .then(() => console.log("Mongo connection is opened"))
   .catch((error) => {
     console.log("Mongo connection is failed");
@@ -23,7 +26,7 @@ const app = express();
 import cors from "cors";
 import cookieParser from "cookie-parser";
 const corsConfig = {
-  origin: process.env.CLIENT_HOST,
+  origin: CLIENT_HOST,
   credentials: true,
 };
 app.use(cors(corsConfig));
@@ -93,8 +96,9 @@ app.use(
 
 // 어플리케이션 내 모든 에러들을 중앙 처리하는 기본 에러 처리 경로.
 import { defaultErrorMiddleware } from "./error/defaultErrorMiddleware";
+
 app.use(defaultErrorMiddleware);
 
 // 서버 실행.
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));

@@ -14,11 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_1 = __importDefault(require("../../../../model/user"));
-const HttpError_1 = require("../../../../error/HttpError");
-const errorWrapper_1 = require("../../../../error/errorWrapper");
-const google_1 = require("../../../../config/authConfig/oauth/google");
-const token_1 = require("../../../../config/authConfig/token");
+const user_1 = __importDefault(require("@/model/user"));
+const HttpError_1 = require("@/error/HttpError");
+const errorWrapper_1 = require("@/error/errorWrapper");
+const google_1 = require("@/config/authConfig/oauth/google");
+const token_1 = require("@/config/authConfig/token");
 const getOauthUrlGoogle = (_, res) => {
     res.json({
         loginUrl: `${google_1.configGoogle.authUrl}?${google_1.authParamsGoogle}`,
@@ -71,7 +71,9 @@ const loginUsingGoogleOauth = (req, res) => __awaiter(void 0, void 0, void 0, fu
     });
     res.cookie("token", token, {
         maxAge: token_1.configJwtToken.tokenExpiration * 1000,
-        httpOnly: true,
+        httpOnly: false,
+        secure: true,
+        sameSite: "none",
     });
     return res.status(201).json({ loggedIn: true });
 });

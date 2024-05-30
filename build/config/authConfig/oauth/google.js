@@ -5,10 +5,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTokenParamsGoogle = exports.authParamsGoogle = exports.configGoogle = void 0;
 const query_string_1 = __importDefault(require("query-string"));
+const getGoogleRedirectUri = () => {
+    const mode = process.env.NODE_ENV;
+    const dev = process.env.OAUTH_GOOGLE_REDIRECT_URL_DEV;
+    const prod = process.env.OAUTH_GOOGLE_REDIRECT_URL_PROD;
+    if (mode === "development") {
+        return dev;
+    }
+    else if (mode === "production") {
+        return prod;
+    }
+    else {
+        return dev;
+    }
+};
 exports.configGoogle = {
     clientId: process.env.OAUTH_GOOGLE_CLIENT_ID,
     clientSecret: process.env.OAUTH_GOOGLE_CLIENT_SECRET,
-    redirectUrl: process.env.OAUTH_GOOGLE_REDIRECT_URL,
+    redirectUrl: getGoogleRedirectUri(),
     authUrl: "https://accounts.google.com/o/oauth2/v2/auth",
     tokenUrl: "https://oauth2.googleapis.com/token",
     profileUrl: "https://www.googleapis.com/oauth2/v1/userinfo",

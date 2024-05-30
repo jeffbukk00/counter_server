@@ -8,7 +8,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const router = (0, express_1.Router)();
 // 해당 라우터에 대한 컨트롤러들.
-const motivationLinks_1 = __importDefault(require("../../controller/controllers/motivationController/motivationLinks"));
+const motivationLinks_1 = __importDefault(require("@/controller/controllers/motivationController/motivationLinks"));
 // 모티베이션 링크들의 id를 가져오기 위한 경로.
 router.get("/:boxId/ids", motivationLinks_1.default.getMotivationLinkIds);
 // 모티베이션 링크를 생성하기 위한 경로.

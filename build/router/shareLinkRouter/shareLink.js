@@ -8,7 +8,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const router = (0, express_1.Router)();
 // 해당 라우터에 대한 컨트롤러들.
-const shareLink_1 = __importDefault(require("../../controller/controllers/shareLinkController/shareLink"));
+const shareLink_1 = __importDefault(require("@/controller/controllers/shareLinkController/shareLink"));
 // 공유 링크를 데이터베이스에 업로드(생성)하는 경로.
 router.post("/upload", shareLink_1.default.uploadShareLink);
 // 공유 링크로부터 버킷을 다운로드 하기 전, 이것의 유효성 및 안전성을 확인하기 위한 경로.

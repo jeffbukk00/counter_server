@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeBucketUtil = exports.removeCounterUtil = void 0;
-const bucket_1 = __importDefault(require("../../model/bucket"));
-const counter_1 = __importDefault(require("../../model/counter"));
-const motivationText_1 = __importDefault(require("../../model/motivation/motivationText"));
-const motivationLink_1 = __importDefault(require("../../model/motivation/motivationLink"));
+const bucket_1 = __importDefault(require("@/model/bucket"));
+const counter_1 = __importDefault(require("@/model/counter"));
+const motivationText_1 = __importDefault(require("@/model/motivation/motivationText"));
+const motivationLink_1 = __importDefault(require("@/model/motivation/motivationLink"));
 const removeCounterUtil = (counter) => __awaiter(void 0, void 0, void 0, function* () {
     yield motivationText_1.default.deleteMany({ _id: { $in: counter.motivationTextIds } });
     yield motivationLink_1.default.deleteMany({ _id: { $in: counter.motivationLinkIds } });

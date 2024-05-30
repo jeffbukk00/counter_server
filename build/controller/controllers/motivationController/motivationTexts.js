@@ -12,11 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const motivationText_1 = __importDefault(require("../../../model/motivation/motivationText"));
-const errorWrapper_1 = require("../../../error/errorWrapper");
-const HttpError_1 = require("../../../error/HttpError");
-const motivation_1 = require("../../../validation/motivation");
-const motivations_1 = require("../../../controller/controllers/motivationController/controller-utils-not-shared/motivations");
+const motivationText_1 = __importDefault(require("@/model/motivation/motivationText"));
+const errorWrapper_1 = require("@/error/errorWrapper");
+const HttpError_1 = require("@/error/HttpError");
+const motivation_1 = require("@/validation/motivation");
+const motivations_1 = require("@/controller/controllers/motivationController/controller-utils-not-shared/motivations");
 // 모티베이션 텍스트들의 id를 가져오기 위한 컨트롤러.
 const getMotivationTextIds = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { boxType } = req.query;
