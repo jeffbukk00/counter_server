@@ -49,6 +49,7 @@ import motivationTextRouter from "@/router/motivationRouter/motivationText";
 import motivationLinksRouter from "@/router/motivationRouter/motivationLinks";
 import motivationLinkRouter from "@/router/motivationRouter/motivationLink";
 import shareLinkRouter from "@/router/shareLinkRouter/shareLink";
+import historyRouter from "@/router/historyRouter/history";
 
 // 유저 인증에 대한 라우터
 app.use(
@@ -83,6 +84,8 @@ app.use("/motivation-link", motivationLinkRouter);
 
 // 공유 링크에 대한 라우터.
 app.use("/sharing", shareLinkRouter);
+
+app.use("/history", historyRouter);
 
 // 404(not-found) 에러에 대한 에러 처리 경로.
 import { errorWrapper } from "./error/errorWrapper";

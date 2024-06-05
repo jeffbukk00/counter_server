@@ -135,7 +135,7 @@ const resetCount = (req, res, _) => __awaiter(void 0, void 0, void 0, function* 
         const newResetCountHistory = new count_1.default({
             offset: counter.startCount - counter.currentCount,
             updatedCurrentCount: counter.startCount,
-            isPositive: null,
+            isPositive: false,
             isResetHistory: true,
             comment: "",
             timeStamp: new Date(),

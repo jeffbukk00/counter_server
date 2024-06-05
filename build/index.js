@@ -48,6 +48,7 @@ const motivationText_1 = __importDefault(require("@/router/motivationRouter/moti
 const motivationLinks_1 = __importDefault(require("@/router/motivationRouter/motivationLinks"));
 const motivationLink_1 = __importDefault(require("@/router/motivationRouter/motivationLink"));
 const shareLink_1 = __importDefault(require("@/router/shareLinkRouter/shareLink"));
+const history_1 = __importDefault(require("@/router/historyRouter/history"));
 // 유저 인증에 대한 라우터
 app.use("/auth", authMain_1.default, google_1.default, kakao_1.default, naver_1.default);
 // 접근 권한을 확인하는 미들웨어.
@@ -69,6 +70,7 @@ app.use("/motivation-links", motivationLinks_1.default);
 app.use("/motivation-link", motivationLink_1.default);
 // 공유 링크에 대한 라우터.
 app.use("/sharing", shareLink_1.default);
+app.use("/history", history_1.default);
 // 404(not-found) 에러에 대한 에러 처리 경로.
 const errorWrapper_1 = require("./error/errorWrapper");
 const HttpError_1 = require("./error/HttpError");

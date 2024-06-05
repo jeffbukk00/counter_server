@@ -167,7 +167,7 @@ const resetCount = async (req: Request, res: Response, _: NextFunction) => {
     const newResetCountHistory = new Count({
       offset: counter.startCount! - counter.currentCount!,
       updatedCurrentCount: counter.startCount,
-      isPositive: null,
+      isPositive: false,
       isResetHistory: true,
       comment: "",
       timeStamp: new Date(),
