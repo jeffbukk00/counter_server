@@ -32,10 +32,10 @@ const counterEditValidation = (direction, startCount, currentCount, endCount) =>
         typeof endCount !== "number")
         return null;
     if (direction === counter_1.default.direction.up) {
-        return currentCount >= startCount && currentCount <= endCount;
+        return currentCount >= startCount && currentCount < endCount;
     }
     else {
-        return currentCount <= startCount && currentCount >= endCount;
+        return currentCount <= startCount && currentCount > endCount;
     }
 };
 exports.counterEditValidation = counterEditValidation;

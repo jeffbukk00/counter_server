@@ -2,10 +2,21 @@ import Bucket from "@/model/bucket";
 import Counter from "@/model/counter";
 import MotivationText from "@/model/motivation/motivationText";
 import MotivationLink from "@/model/motivation/motivationLink";
+import AchievementStack from "@/model/logging/achievementStack";
+import Count from "@/model/logging/count";
 
 export const removeCounterUtil = async (counter: any) => {
   await MotivationText.deleteMany({ _id: { $in: counter.motivationTextIds } });
   await MotivationLink.deleteMany({ _id: { $in: counter.motivationLinkIds } });
+
+  const achievementStackHistory = await AchievementStack.find({
+    _id: { $in: counter.achievementStackHistory },
+  });
+  for (const e of achievementStackHistory)
+    await Count.deleteMany({ _id: { $in: e.countHistory } });
+  await AchievementStack.deleteMany({
+    _id: { $in: counter.achievementStackHistory },
+  });
   await Counter.deleteOne({ _id: counter._id });
   return;
 };

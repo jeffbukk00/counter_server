@@ -43,9 +43,9 @@ export const counterEditValidation = (
   )
     return null;
   if (direction === counterConstants.direction.up) {
-    return currentCount >= startCount && currentCount <= endCount;
+    return currentCount >= startCount && currentCount < endCount;
   } else {
-    return currentCount <= startCount && currentCount >= endCount;
+    return currentCount <= startCount && currentCount > endCount;
   }
 };
 

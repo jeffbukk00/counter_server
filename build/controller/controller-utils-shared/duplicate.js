@@ -18,6 +18,7 @@ const counter_1 = __importDefault(require("@/model/counter"));
 const motivationText_1 = __importDefault(require("@/model/motivation/motivationText"));
 const motivationLink_1 = __importDefault(require("@/model/motivation/motivationLink"));
 const shared_1 = __importDefault(require("@/constants/shared"));
+const achievementStack_1 = __importDefault(require("@/model/logging/achievementStack"));
 const insertMotivationTexts = (motivationTexts) => __awaiter(void 0, void 0, void 0, function* () {
     const insertedMotivationTexts = yield motivationText_1.default.insertMany(motivationTexts.map((e) => {
         return { text: e.text };
@@ -35,6 +36,12 @@ const insertMotivationLinks = (motivationLinks) => __awaiter(void 0, void 0, voi
 });
 exports.insertMotivationLinks = insertMotivationLinks;
 const duplicateCounterUtil = (counter_2, ...args_1) => __awaiter(void 0, [counter_2, ...args_1], void 0, function* (counter, duplicateType = shared_1.default.duplicateType.all) {
+    const initialAchievementHistory = new achievementStack_1.default({
+        stack: 0,
+        comment: "",
+        timeStamp: new Date(),
+        countHistory: [],
+    });
     const newCounter = new counter_1.default({
         title: counter.title,
         startCount: counter.startCount,
@@ -42,9 +49,11 @@ const duplicateCounterUtil = (counter_2, ...args_1) => __awaiter(void 0, [counte
         endCount: counter.endCount,
         direction: counter.direction,
         achievementStack: 0,
+        achievementStackHistory: [initialAchievementHistory],
         motivationTextIds: [],
         motivationLinkIds: [],
     });
+    yield initialAchievementHistory.save();
     newCounter.motivationTextIds = yield (0, exports.insertMotivationTexts)([
         ...counter.motivationTexts,
     ]);

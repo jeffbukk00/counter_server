@@ -16,7 +16,7 @@ router.put("/:counterId", counter_1.default.editCounter);
 // 카운터의 카운트("currentCount" 필드)를 업데이트하는 경로.
 router.patch("/count/:counterId", counter_1.default.updateCount);
 // 카운터의 카운트("currentCount" 필드)를 리셋하는 경로.
-router.patch("/count/reset/:counterId", counter_1.default.resetCount);
+router.patch("/count/reset/:counterId/:resetFlag", counter_1.default.resetCount);
 // 카운터의 성취 스택("achievementStack" 필드)를 업데이트 하는 경로.
 router.patch("/achievement-stack/:counterId", counter_1.default.updateAchievementStack);
 // 카운터의 성취 스택("achievementStack" 필드)를 리셋 하는 경로.

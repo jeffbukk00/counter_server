@@ -20,6 +20,7 @@ const counter_3 = __importDefault(require("@/constants/counter"));
 const find_1 = require("@/controller/controller-utils-shared/find");
 const remove_1 = require("@/controller/controller-utils-shared/remove");
 const duplicate_1 = require("@/controller/controller-utils-shared/duplicate");
+const achievementStack_1 = __importDefault(require("@/model/logging/achievementStack"));
 const getCounterIds = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { bucketId } = req.params;
     const bucket = yield (0, find_1.findBucket)(bucketId);
@@ -45,6 +46,12 @@ const createCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, functio
     const direction = startCount < endCount
         ? counter_3.default.direction.up
         : counter_3.default.direction.down;
+    const initialAchievementHistory = new achievementStack_1.default({
+        stack: 0,
+        comment: "",
+        timeStamp: new Date(),
+        countHistory: [],
+    });
     const newCounter = new counter_1.default({
         title,
         startCount,
@@ -52,9 +59,11 @@ const createCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, functio
         endCount,
         direction,
         achievementStack: 0,
+        achievementStackHistory: [initialAchievementHistory],
         motivationTextIds: [],
         motivationLinkIds: [],
     });
+    yield initialAchievementHistory.save();
     yield newCounter.save();
     bucket.counterIds.push(newCounter._id);
     yield bucket.save();

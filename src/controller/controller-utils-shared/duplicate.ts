@@ -4,6 +4,7 @@ import MotivationText from "@/model/motivation/motivationText";
 import MotivationLink from "@/model/motivation/motivationLink";
 
 import sharedConstants from "@/constants/shared";
+import AchievementStack from "@/model/logging/achievementStack";
 
 export const insertMotivationTexts = async (motivationTexts: any) => {
   const insertedMotivationTexts = await MotivationText.insertMany(
@@ -31,6 +32,13 @@ export const duplicateCounterUtil = async (
   counter: any,
   duplicateType: string = sharedConstants.duplicateType.all
 ) => {
+  const initialAchievementHistory = new AchievementStack({
+    stack: 0,
+    comment: "",
+    timeStamp: new Date(),
+    countHistory: [],
+  });
+
   const newCounter = new Counter({
     title: counter.title,
     startCount: counter.startCount,
@@ -38,9 +46,12 @@ export const duplicateCounterUtil = async (
     endCount: counter.endCount,
     direction: counter.direction,
     achievementStack: 0,
+    achievementStackHistory: [initialAchievementHistory],
     motivationTextIds: [],
     motivationLinkIds: [],
   });
+
+  await initialAchievementHistory.save();
 
   newCounter.motivationTextIds = await insertMotivationTexts([
     ...counter.motivationTexts,

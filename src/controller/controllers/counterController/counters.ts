@@ -12,6 +12,7 @@ import {
 } from "@/controller/controller-utils-shared/find";
 import { removeCounterUtil } from "@/controller/controller-utils-shared/remove";
 import { duplicateCounterUtil } from "@/controller/controller-utils-shared/duplicate";
+import AchievementStack from "@/model/logging/achievementStack";
 
 const getCounterIds = async (req: Request, res: Response, _: NextFunction) => {
   const { bucketId } = req.params;
@@ -52,6 +53,14 @@ const createCounter = async (req: Request, res: Response, _: NextFunction) => {
     startCount < endCount
       ? counterConstants.direction.up
       : counterConstants.direction.down;
+
+  const initialAchievementHistory = new AchievementStack({
+    stack: 0,
+    comment: "",
+    timeStamp: new Date(),
+    countHistory: [],
+  });
+
   const newCounter = new Counter({
     title,
     startCount,
@@ -59,9 +68,12 @@ const createCounter = async (req: Request, res: Response, _: NextFunction) => {
     endCount,
     direction,
     achievementStack: 0,
+    achievementStackHistory: [initialAchievementHistory],
     motivationTextIds: [],
     motivationLinkIds: [],
   });
+
+  await initialAchievementHistory.save();
   await newCounter.save();
 
   bucket.counterIds.push(newCounter._id);

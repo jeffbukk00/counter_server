@@ -9,6 +9,8 @@ import {
 import counterConstants from "@/constants/counter";
 
 import { findCounter } from "@/controller/controller-utils-shared/find";
+import AchievementStack from "@/model/logging/achievementStack";
+import Count from "@/model/logging/count";
 
 const getCounter = async (req: Request, res: Response, _: NextFunction) => {
   const { counterId } = req.params;
@@ -50,6 +52,7 @@ const editCounter = async (req: Request, res: Response, _: NextFunction) => {
 
   return res.status(201).json({ message: "Edit counter successfully" });
 };
+
 const updateCount = async (req: Request, res: Response, _: NextFunction) => {
   const { counterId } = req.params;
 
@@ -65,6 +68,77 @@ const updateCount = async (req: Request, res: Response, _: NextFunction) => {
   if (!countUpdateValidationResult && countUpdateValidationResult === false)
     throw new HttpError(400, { message: "Invalid input from client side" });
 
+  if (counter.currentCount === updatedCurrentCount)
+    return res.status(201).json({ message: "Update count successfully" });
+
+  const currentAchievementStack = await AchievementStack.findOne({
+    _id: counter.achievementStackHistory[
+      counter.achievementStackHistory.length - 1
+    ],
+  });
+  if (!currentAchievementStack)
+    throw new HttpError(404, {
+      message: "cannot find achievement history which this count belongs to",
+    });
+
+  const offset = updatedCurrentCount - counter.currentCount!;
+  const sign = Math.sign(offset);
+
+  if (sign > 0) {
+    if (counter.direction === counterConstants.direction.up) {
+      const newCountHistory = new Count({
+        offset,
+        updatedCurrentCount,
+        isPositive: true,
+        isResetHistory: false,
+        comment: "",
+        timeStamp: new Date(),
+      });
+
+      currentAchievementStack.countHistory.push(newCountHistory._id);
+      newCountHistory.save();
+    } else {
+      const newCountHistory = new Count({
+        offset,
+        updatedCurrentCount,
+        isPositive: false,
+        isResetHistory: false,
+        comment: "",
+        timeStamp: new Date(),
+      });
+
+      currentAchievementStack.countHistory.push(newCountHistory._id);
+      newCountHistory.save();
+    }
+  } else {
+    if (counter.direction === counterConstants.direction.up) {
+      const newCountHistory = new Count({
+        offset,
+        updatedCurrentCount,
+        isPositive: false,
+        isResetHistory: false,
+        comment: "",
+        timeStamp: new Date(),
+      });
+
+      currentAchievementStack.countHistory.push(newCountHistory._id);
+      newCountHistory.save();
+    } else {
+      const newCountHistory = new Count({
+        offset,
+        updatedCurrentCount,
+        isPositive: true,
+        isResetHistory: false,
+        comment: "",
+        timeStamp: new Date(),
+      });
+
+      currentAchievementStack.countHistory.push(newCountHistory._id);
+      newCountHistory.save();
+    }
+  }
+
+  await currentAchievementStack.save();
   counter.currentCount = updatedCurrentCount;
   await counter.save();
 
@@ -72,9 +146,38 @@ const updateCount = async (req: Request, res: Response, _: NextFunction) => {
 };
 
 const resetCount = async (req: Request, res: Response, _: NextFunction) => {
-  const { counterId } = req.params;
+  const { counterId, resetFlag } = req.params;
 
   const counter = await findCounter(counterId);
+
+  if (counter.currentCount === counter.startCount)
+    return res.status(201).json({ mesasge: "Reset count successfully" });
+
+  if (resetFlag === counterConstants.resetFlag.resetHistroy) {
+    const currentAchievementStack = await AchievementStack.findOne({
+      _id: counter.achievementStackHistory[
+        counter.achievementStackHistory.length - 1
+      ],
+    });
+    if (!currentAchievementStack)
+      throw new HttpError(404, {
+        message: "cannot find achievement history which this count belongs to",
+      });
+
+    const newResetCountHistory = new Count({
+      offset: counter.startCount! - counter.currentCount!,
+      updatedCurrentCount: counter.startCount,
+      isPositive: null,
+      isResetHistory: true,
+      comment: "",
+      timeStamp: new Date(),
+    });
+
+    currentAchievementStack.countHistory.push(newResetCountHistory.id);
+
+    await newResetCountHistory.save();
+    await currentAchievementStack.save();
+  }
 
   counter.currentCount = counter.startCount;
   await counter.save();
@@ -95,7 +198,17 @@ const updateAchievementStack = async (
   if (updatedAchievementStack < 0)
     throw new HttpError(400, { message: "Invalid input from client side" });
 
+  const newAchievementHistory = new AchievementStack({
+    stack: updatedAchievementStack,
+    comment: "",
+    countHistory: [],
+    timeStamp: new Date(),
+  });
+
   counter.achievementStack = updatedAchievementStack;
+  counter.achievementStackHistory.push(newAchievementHistory._id);
+
+  await newAchievementHistory.save();
   await counter.save();
 
   return res
@@ -112,7 +225,31 @@ const resetAchievementStack = async (
 
   const counter = await findCounter(counterId);
 
+  if (counter.achievementStackHistory.length <= 1)
+    return res
+      .status(201)
+      .json({ message: "Reset achievement stack successfully" });
+
+  let achievementStackHistoryIds = [...counter.achievementStackHistory];
+  let achievementStackHistory = await AchievementStack.find({
+    _id: { $in: counter.achievementStackHistory },
+  });
+  const lastHistory = achievementStackHistory.pop();
+  lastHistory!.stack = 0;
+  const lastHistoryId = achievementStackHistoryIds.pop();
   counter.achievementStack = 0;
+  counter.achievementStackHistory = [];
+  counter.achievementStackHistory.push(lastHistoryId!);
+
+  for (const e of achievementStackHistory) {
+    await Count.deleteMany({ _id: { $in: e.countHistory } });
+  }
+
+  await AchievementStack.deleteMany({
+    _id: { $in: achievementStackHistoryIds },
+  });
+
+  await lastHistory?.save();
   await counter.save();
 
   return res
