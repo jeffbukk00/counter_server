@@ -17,8 +17,9 @@ const HttpError_1 = require("@/error/HttpError");
 const counter_1 = require("@/validation/counter");
 const counter_2 = __importDefault(require("@/constants/counter"));
 const find_1 = require("@/controller/controller-utils-shared/find");
-const achievementStack_1 = __importDefault(require("@/model/logging/achievementStack"));
-const count_1 = __importDefault(require("@/model/logging/count"));
+const achievementStack_1 = __importDefault(require("@/model/history/achievementStack"));
+const count_1 = __importDefault(require("@/model/history/count"));
+const history_1 = require("../historyController/controller-utils-not-shard/history");
 const getCounter = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { counterId } = req.params;
     const counter = yield (0, find_1.findCounter)(counterId);
@@ -70,7 +71,7 @@ const updateCount = (req, res, _) => __awaiter(void 0, void 0, void 0, function*
                 isPositive: true,
                 isResetHistory: false,
                 comment: "",
-                timeStamp: new Date(),
+                timestamp: new Date(),
             });
             currentAchievementStack.countHistory.push(newCountHistory._id);
             newCountHistory.save();
@@ -82,7 +83,7 @@ const updateCount = (req, res, _) => __awaiter(void 0, void 0, void 0, function*
                 isPositive: false,
                 isResetHistory: false,
                 comment: "",
-                timeStamp: new Date(),
+                timestamp: new Date(),
             });
             currentAchievementStack.countHistory.push(newCountHistory._id);
             newCountHistory.save();
@@ -96,7 +97,7 @@ const updateCount = (req, res, _) => __awaiter(void 0, void 0, void 0, function*
                 isPositive: false,
                 isResetHistory: false,
                 comment: "",
-                timeStamp: new Date(),
+                timestamp: new Date(),
             });
             currentAchievementStack.countHistory.push(newCountHistory._id);
             newCountHistory.save();
@@ -108,7 +109,7 @@ const updateCount = (req, res, _) => __awaiter(void 0, void 0, void 0, function*
                 isPositive: true,
                 isResetHistory: false,
                 comment: "",
-                timeStamp: new Date(),
+                timestamp: new Date(),
             });
             currentAchievementStack.countHistory.push(newCountHistory._id);
             newCountHistory.save();
@@ -138,7 +139,7 @@ const resetCount = (req, res, _) => __awaiter(void 0, void 0, void 0, function* 
             isPositive: false,
             isResetHistory: true,
             comment: "",
-            timeStamp: new Date(),
+            timestamp: new Date(),
         });
         currentAchievementStack.countHistory.push(newResetCountHistory.id);
         yield newResetCountHistory.save();
@@ -154,14 +155,20 @@ const updateAchievementStack = (req, res, _) => __awaiter(void 0, void 0, void 0
     const { updatedAchievementStack } = req.body;
     if (updatedAchievementStack < 0)
         throw new HttpError_1.HttpError(400, { message: "Invalid input from client side" });
+    const achieved = yield (0, history_1.findAchievementStack)(counter.achievementStackHistory[counter.achievementStackHistory.length - 1].toString());
+    achieved.isAchieved = true;
+    achieved.achievedAt = new Date();
     const newAchievementHistory = new achievementStack_1.default({
+        isAchieved: false,
         stack: updatedAchievementStack,
         comment: "",
         countHistory: [],
-        timeStamp: new Date(),
+        createdAt: new Date(),
+        achievedAt: null,
     });
     counter.achievementStack = updatedAchievementStack;
     counter.achievementStackHistory.push(newAchievementHistory._id);
+    yield achieved.save();
     yield newAchievementHistory.save();
     yield counter.save();
     return res

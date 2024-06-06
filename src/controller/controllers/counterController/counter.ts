@@ -9,8 +9,9 @@ import {
 import counterConstants from "@/constants/counter";
 
 import { findCounter } from "@/controller/controller-utils-shared/find";
-import AchievementStack from "@/model/logging/achievementStack";
-import Count from "@/model/logging/count";
+import AchievementStack from "@/model/history/achievementStack";
+import Count from "@/model/history/count";
+import { findAchievementStack } from "../historyController/controller-utils-not-shard/history";
 
 const getCounter = async (req: Request, res: Response, _: NextFunction) => {
   const { counterId } = req.params;
@@ -92,7 +93,7 @@ const updateCount = async (req: Request, res: Response, _: NextFunction) => {
         isPositive: true,
         isResetHistory: false,
         comment: "",
-        timeStamp: new Date(),
+        timestamp: new Date(),
       });
 
       currentAchievementStack.countHistory.push(newCountHistory._id);
@@ -104,7 +105,7 @@ const updateCount = async (req: Request, res: Response, _: NextFunction) => {
         isPositive: false,
         isResetHistory: false,
         comment: "",
-        timeStamp: new Date(),
+        timestamp: new Date(),
       });
 
       currentAchievementStack.countHistory.push(newCountHistory._id);
@@ -118,7 +119,7 @@ const updateCount = async (req: Request, res: Response, _: NextFunction) => {
         isPositive: false,
         isResetHistory: false,
         comment: "",
-        timeStamp: new Date(),
+        timestamp: new Date(),
       });
 
       currentAchievementStack.countHistory.push(newCountHistory._id);
@@ -130,7 +131,7 @@ const updateCount = async (req: Request, res: Response, _: NextFunction) => {
         isPositive: true,
         isResetHistory: false,
         comment: "",
-        timeStamp: new Date(),
+        timestamp: new Date(),
       });
 
       currentAchievementStack.countHistory.push(newCountHistory._id);
@@ -170,7 +171,7 @@ const resetCount = async (req: Request, res: Response, _: NextFunction) => {
       isPositive: false,
       isResetHistory: true,
       comment: "",
-      timeStamp: new Date(),
+      timestamp: new Date(),
     });
 
     currentAchievementStack.countHistory.push(newResetCountHistory.id);
@@ -198,16 +199,28 @@ const updateAchievementStack = async (
   if (updatedAchievementStack < 0)
     throw new HttpError(400, { message: "Invalid input from client side" });
 
+  const achieved = await findAchievementStack(
+    counter.achievementStackHistory[
+      counter.achievementStackHistory.length - 1
+    ].toString()
+  );
+
+  achieved.isAchieved = true;
+  achieved.achievedAt = new Date();
+
   const newAchievementHistory = new AchievementStack({
+    isAchieved: false,
     stack: updatedAchievementStack,
     comment: "",
     countHistory: [],
-    timeStamp: new Date(),
+    createdAt: new Date(),
+    achievedAt: null,
   });
 
   counter.achievementStack = updatedAchievementStack;
   counter.achievementStackHistory.push(newAchievementHistory._id);
 
+  await achieved.save();
   await newAchievementHistory.save();
   await counter.save();
 

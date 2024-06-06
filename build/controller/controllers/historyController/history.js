@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const find_1 = require("@/controller/controller-utils-shared/find");
 const errorWrapper_1 = require("@/error/errorWrapper");
-const achievementStack_1 = __importDefault(require("@/model/logging/achievementStack"));
+const achievementStack_1 = __importDefault(require("@/model/history/achievementStack"));
 const history_1 = require("./controller-utils-not-shard/history");
 const HttpError_1 = require("@/error/HttpError");
 const getHistoryAll = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
@@ -35,13 +35,24 @@ const getAchievementStackHistoryIds = (req, res, _) => __awaiter(void 0, void 0,
 const getAchievementStackHistory = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
     const { achievementStackId } = req.params;
     const achievementStack = yield (0, history_1.findAchievementStack)(achievementStackId);
+    const lastCountId = achievementStack.countHistory[achievementStack.countHistory.length - 1];
+    let achievementStackData = (lastestCountAt) => ({
+        _id: achievementStack._id,
+        isAchieved: achievementStack.isAchieved,
+        stack: achievementStack.stack,
+        comment: achievementStack.comment,
+        createdAt: achievementStack.createdAt,
+        achievedAt: achievementStack.achievedAt,
+        latestCountAt: lastestCountAt,
+    });
+    if (lastCountId) {
+        const recentCount = yield (0, history_1.findCount)(achievementStack.countHistory[achievementStack.countHistory.length - 1].toString());
+        return res.status(200).json({
+            achievementStack: achievementStackData(recentCount.timestamp),
+        });
+    }
     return res.status(200).json({
-        achievementStack: {
-            _id: achievementStack._id,
-            stack: achievementStack.stack,
-            comment: achievementStack.comment,
-            timestamp: achievementStack.timeStamp,
-        },
+        achievementStack: achievementStackData(null),
     });
 });
 const getCountHistoryAll = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {

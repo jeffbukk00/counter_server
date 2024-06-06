@@ -17,8 +17,8 @@ const bucket_1 = __importDefault(require("@/model/bucket"));
 const counter_1 = __importDefault(require("@/model/counter"));
 const motivationText_1 = __importDefault(require("@/model/motivation/motivationText"));
 const motivationLink_1 = __importDefault(require("@/model/motivation/motivationLink"));
-const achievementStack_1 = __importDefault(require("@/model/logging/achievementStack"));
-const count_1 = __importDefault(require("@/model/logging/count"));
+const achievementStack_1 = __importDefault(require("@/model/history/achievementStack"));
+const count_1 = __importDefault(require("@/model/history/count"));
 const removeCounterUtil = (counter) => __awaiter(void 0, void 0, void 0, function* () {
     yield motivationText_1.default.deleteMany({ _id: { $in: counter.motivationTextIds } });
     yield motivationLink_1.default.deleteMany({ _id: { $in: counter.motivationLinkIds } });

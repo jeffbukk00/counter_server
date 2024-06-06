@@ -4,10 +4,10 @@ import { Schema, model } from "mongoose";
 const countSchema = new Schema({
   offset: Number,
   updatedCurrentCount: Number,
-  isPositive: Boolean, // boolean || null
+  isPositive: Boolean,
   isResetHistory: Boolean,
   comment: String,
-  timeStamp: Date,
+  timestamp: Date,
 });
 
 export default model("Count", countSchema);

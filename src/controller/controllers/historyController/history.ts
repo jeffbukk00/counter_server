@@ -1,7 +1,7 @@
 import { findCounter } from "@/controller/controller-utils-shared/find";
 import { errorWrapper } from "@/error/errorWrapper";
 
-import AchievementStack from "@/model/logging/achievementStack";
+import AchievementStack from "@/model/history/achievementStack";
 
 import { NextFunction, Request, Response } from "@/types/express";
 import {
@@ -45,13 +45,33 @@ const getAchievementStackHistory = async (
 
   const achievementStack = await findAchievementStack(achievementStackId);
 
+  const lastCountId =
+    achievementStack.countHistory[achievementStack.countHistory.length - 1];
+
+  let achievementStackData = (lastestCountAt: Date | null) => ({
+    _id: achievementStack._id,
+    isAchieved: achievementStack.isAchieved,
+    stack: achievementStack.stack,
+    comment: achievementStack.comment,
+    createdAt: achievementStack.createdAt,
+    achievedAt: achievementStack.achievedAt,
+    latestCountAt: lastestCountAt,
+  });
+
+  if (lastCountId) {
+    const recentCount = await findCount(
+      achievementStack.countHistory[
+        achievementStack.countHistory.length - 1
+      ].toString()
+    );
+
+    return res.status(200).json({
+      achievementStack: achievementStackData(recentCount.timestamp!),
+    });
+  }
+
   return res.status(200).json({
-    achievementStack: {
-      _id: achievementStack._id,
-      stack: achievementStack.stack,
-      comment: achievementStack.comment,
-      timestamp: achievementStack.timeStamp,
-    },
+    achievementStack: achievementStackData(null),
   });
 };
 

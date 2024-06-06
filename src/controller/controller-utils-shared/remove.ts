@@ -2,8 +2,8 @@ import Bucket from "@/model/bucket";
 import Counter from "@/model/counter";
 import MotivationText from "@/model/motivation/motivationText";
 import MotivationLink from "@/model/motivation/motivationLink";
-import AchievementStack from "@/model/logging/achievementStack";
-import Count from "@/model/logging/count";
+import AchievementStack from "@/model/history/achievementStack";
+import Count from "@/model/history/count";
 
 export const removeCounterUtil = async (counter: any) => {
   await MotivationText.deleteMany({ _id: { $in: counter.motivationTextIds } });

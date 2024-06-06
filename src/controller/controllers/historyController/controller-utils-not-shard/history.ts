@@ -1,6 +1,6 @@
 import { HttpError } from "@/error/HttpError";
-import AchievementStack from "@/model/logging/achievementStack";
-import Count from "@/model/logging/count";
+import AchievementStack from "@/model/history/achievementStack";
+import Count from "@/model/history/count";
 
 export const findAchievementStack = async (achieveStackId: string) => {
   const achievementStack = await AchievementStack.findOne({
