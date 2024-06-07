@@ -74,7 +74,7 @@ const loginUsingNaverOauth = async (req: Request, res: Response) => {
       snsId,
       provider: "naver",
       bucketIds: [],
-      unreadGuideIds: new Array(12)
+      unreadGuideIds: new Array(13)
         .fill(0)
         .map((_, i) => "guideId" + (i + 1).toString()),
     });

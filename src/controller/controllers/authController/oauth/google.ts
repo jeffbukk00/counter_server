@@ -72,7 +72,7 @@ const loginUsingGoogleOauth = async (req: Request, res: Response) => {
       snsId,
       provider: "google",
       bucketIds: [],
-      unreadGuideIds: new Array(12)
+      unreadGuideIds: new Array(13)
         .fill(0)
         .map((_, i) => "guideId" + (i + 1).toString()),
     });
