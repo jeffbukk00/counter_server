@@ -67,7 +67,7 @@ const loginUsingKakaoOauth = (req, res) => __awaiter(void 0, void 0, void 0, fun
             snsId,
             provider: "kakao",
             bucketIds: [],
-            unreadGuideIds: new Array(12)
+            unreadGuideIds: new Array(13)
                 .fill(0)
                 .map((_, i) => "guideId" + (i + 1).toString()),
         });
@@ -77,13 +77,13 @@ const loginUsingKakaoOauth = (req, res) => __awaiter(void 0, void 0, void 0, fun
     const token = jsonwebtoken_1.default.sign({ userId }, token_1.configJwtToken.tokenSecret, {
         expiresIn: token_1.configJwtToken.tokenExpiration,
     });
-    res.cookie("token", token, {
-        maxAge: token_1.configJwtToken.tokenExpiration * 1000,
-        httpOnly: false,
-        secure: true,
-        sameSite: "none",
-    });
-    return res.status(201).json({ loggedIn: true });
+    // res.cookie("token", token, {
+    //   maxAge: configJwtToken.tokenExpiration * 1000,
+    //   httpOnly: false,
+    //   secure: true,
+    //   sameSite: "none",
+    // });
+    return res.status(201).json({ loggedIn: true, token });
 });
 exports.default = {
     getOauthUrlKakao: (0, errorWrapper_1.errorWrapper)(getOauthUrlKakao),

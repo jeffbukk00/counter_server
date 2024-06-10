@@ -10,20 +10,18 @@ const HttpError_1 = require("@/error/HttpError");
 const token_1 = require("@/config/authConfig/token");
 const checkLoggedIn = (req, res) => {
     try {
-        const token = req.cookies.token;
+        const authorization = req.get("Authorization");
+        if (!authorization)
+            throw new HttpError_1.HttpError(400, { loggedIn: false });
+        const token = authorization.split(" ")[1];
         if (!token)
             throw new HttpError_1.HttpError(400, { loggedIn: false });
-        const { userId } = jsonwebtoken_1.default.verify(token, token_1.configJwtToken.tokenSecret);
-        const newToken = jsonwebtoken_1.default.sign({ userId }, token_1.configJwtToken.tokenSecret, {
-            expiresIn: token_1.configJwtToken.tokenExpiration,
-        });
-        res.cookie("token", newToken, {
-            maxAge: token_1.configJwtToken.tokenExpiration * 1000,
-            httpOnly: false,
-            secure: true,
-            sameSite: "none",
-        });
-        res.status(200).json({ loggedIn: true });
+        // const { userId } = jwt.verify(token, configJwtToken.tokenSecret) as any;
+        // const newToken = jwt.sign({ userId }, configJwtToken.tokenSecret, {
+        //   expiresIn: configJwtToken.tokenExpiration,
+        // });
+        jsonwebtoken_1.default.verify(token, token_1.configJwtToken.tokenSecret);
+        return res.status(200).json({ loggedIn: true });
     }
     catch (err) {
         console.log(err);
@@ -32,10 +30,11 @@ const checkLoggedIn = (req, res) => {
 };
 exports.checkLoggedIn = checkLoggedIn;
 const logout = (req, res) => {
-    res
-        .clearCookie("token", { httpOnly: false, secure: true, sameSite: "none" })
-        .status(201)
-        .json({ message: "Logged out" });
+    // res
+    //   .clearCookie("token", { httpOnly: false, secure: true, sameSite: "none" })
+    //   .status(201)
+    //   .json({ message: "Logged out" });
+    res.status(201).json({ message: "Logged out" });
 };
 exports.logout = logout;
 exports.default = {

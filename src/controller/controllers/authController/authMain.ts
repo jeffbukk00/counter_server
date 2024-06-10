@@ -7,21 +7,21 @@ import { configJwtToken } from "@/config/authConfig/token";
 
 export const checkLoggedIn = (req: Request, res: Response) => {
   try {
-    const token = req.cookies.token;
+    const authorization = req.get("Authorization");
+
+    if (!authorization) throw new HttpError(400, { loggedIn: false });
+
+    const token = authorization.split(" ")[1];
 
     if (!token) throw new HttpError(400, { loggedIn: false });
-    const { userId } = jwt.verify(token, configJwtToken.tokenSecret) as any;
-    const newToken = jwt.sign({ userId }, configJwtToken.tokenSecret, {
-      expiresIn: configJwtToken.tokenExpiration,
-    });
 
-    res.cookie("token", newToken, {
-      maxAge: configJwtToken.tokenExpiration * 1000,
-      httpOnly: false,
-      secure: true,
-      sameSite: "none",
-    });
-    res.status(200).json({ loggedIn: true });
+    // const { userId } = jwt.verify(token, configJwtToken.tokenSecret) as any;
+    // const newToken = jwt.sign({ userId }, configJwtToken.tokenSecret, {
+    //   expiresIn: configJwtToken.tokenExpiration,
+    // });
+
+    jwt.verify(token, configJwtToken.tokenSecret) as any;
+    return res.status(200).json({ loggedIn: true });
   } catch (err) {
     console.log(err);
     throw new HttpError(400, { loggedIn: false });
@@ -29,10 +29,12 @@ export const checkLoggedIn = (req: Request, res: Response) => {
 };
 
 export const logout = (req: Request, res: Response) => {
-  res
-    .clearCookie("token", { httpOnly: false, secure: true, sameSite: "none" })
-    .status(201)
-    .json({ message: "Logged out" });
+  // res
+  //   .clearCookie("token", { httpOnly: false, secure: true, sameSite: "none" })
+  //   .status(201)
+  //   .json({ message: "Logged out" });
+
+  res.status(201).json({ message: "Logged out" });
 };
 
 export default {

@@ -94,13 +94,13 @@ const loginUsingKakaoOauth = async (req: Request, res: Response) => {
     expiresIn: configJwtToken.tokenExpiration,
   });
 
-  res.cookie("token", token, {
-    maxAge: configJwtToken.tokenExpiration * 1000,
-    httpOnly: false,
-    secure: true,
-    sameSite: "none",
-  });
-  return res.status(201).json({ loggedIn: true });
+  // res.cookie("token", token, {
+  //   maxAge: configJwtToken.tokenExpiration * 1000,
+  //   httpOnly: false,
+  //   secure: true,
+  //   sameSite: "none",
+  // });
+  return res.status(201).json({ loggedIn: true, token });
 };
 
 export default {

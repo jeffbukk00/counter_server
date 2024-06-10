@@ -9,10 +9,13 @@ import { configJwtToken } from "@/config/authConfig/token";
 
 // 접근 권한을 확인하는 미들웨어.
 const confirmAuthorized = (req: Request, _: Response, next: NextFunction) => {
-  const token = req.cookies.token;
+  const authorization = req.get("Authorization");
 
-  // 요청 쿠키 내 jwt 토큰이 존재하는지 확인.
-  if (!token) throw new HttpError(401, { message: "Request has no token" });
+  if (!authorization) throw new HttpError(400, { loggedIn: false });
+
+  const token = authorization.split(" ")[1];
+
+  if (!token) throw new HttpError(400, { loggedIn: false });
 
   const { userId }: any = jwt.verify(token, configJwtToken.tokenSecret);
 
