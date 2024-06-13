@@ -1,40 +1,48 @@
+import { findMotivationText } from "@/controller/controllers/motivationController/controller-utils-not-shared/motivation";
+
+import { motivationTextValidation } from "@/validation/motivation";
 import { Request, Response, NextFunction } from "@/types/express";
 import { errorWrapper } from "@/error/errorWrapper";
 import { HttpError } from "@/error/HttpError";
-import { motivationTextValidation } from "@/validation/motivation";
 
-import { findMotivationText } from "@/controller/controllers/motivationController/controller-utils-not-shared/motivation";
-
-// 단일 모티베이션 텍스트를 가져오는 컨트롤러.
+// 단일 motivationText를 가져오는 컨트롤러.
 const getMotivationText = async (
   req: Request,
   res: Response,
   _: NextFunction
 ) => {
+  // 요청한 motivationText의 id가 요청 패러미터에 저장.
   const { motivationTextId } = req.params;
-  // 모티베이션 텍스트를 가져옴.
+
+  // 요청한 motivationText를 DB로부터 쿼리.
   const motivationText = await findMotivationText(motivationTextId);
 
   return res.status(200).json({ motivationText });
 };
 
-// 모티베이션 텍스트를 수정하는 컨트롤러.
+// motivationText를 수정하는 컨트롤러.
 const editMotivationText = async (
   req: Request,
   res: Response,
   _: NextFunction
 ) => {
+  // 수정 요청한 motivationText의 id를 요청 패러미터에 저장.
   const { motivationTextId } = req.params;
-  // 수정할 모티베이션 텍스트를 가져옴.
+
+  // 수정 요청한 motivationText를 DB로부터 쿼리.
   const motivationText = await findMotivationText(motivationTextId);
 
-  // 모티베이션 텍스트 수정에 대한 유효성 검사.
+  // 요청의 body에 저장 된 수정을 위해 업데이트 된 motivationText 데이터에 대한 유효성 검사.
   const { error } = motivationTextValidation(req.body);
+
+  // 요청의 body에 저장 된 수정을 위해 업데이트 된 motivationText 데이터에 대한 유효성 검사 실패 시 에러 처리.
   if (error) throw new HttpError(400, { message: error.details[0].message });
 
-  // 모티베이션 텍스트 수정 및 저장.
+  // motivationText 수정.
   const { text } = req.body;
   motivationText.text = text;
+
+  // DB에 저장.
   await motivationText.save();
 
   return res.status(201).json({ message: "Edit motivation text successfully" });

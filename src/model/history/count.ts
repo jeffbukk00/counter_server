@@ -1,4 +1,3 @@
-import { boolean } from "joi";
 import { Schema, model } from "mongoose";
 
 const countSchema = new Schema({

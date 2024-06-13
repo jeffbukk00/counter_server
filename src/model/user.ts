@@ -1,5 +1,3 @@
-// 유저에 대한 모델 생성.
-
 import { Schema, model } from "mongoose";
 
 const userSchema = new Schema({

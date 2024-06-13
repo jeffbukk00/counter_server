@@ -1,3 +1,4 @@
+// DB 연결 URL을 반환.
 const getDatabaseUrl = () => {
   const mode = process.env.NODE_ENV;
 

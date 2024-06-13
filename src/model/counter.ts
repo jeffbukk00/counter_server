@@ -1,5 +1,3 @@
-// 카운터에 대한 모델 생성.
-
 import { Schema, model } from "mongoose";
 import achievementStack from "./history/achievementStack";
 

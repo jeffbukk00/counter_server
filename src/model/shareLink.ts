@@ -1,4 +1,3 @@
-// 공유 링크에 대한 모델 생성.
 import { Schema, model } from "mongoose";
 
 const shareLinkSchema = new Schema({

@@ -1,3 +1,4 @@
+// 클라이언트의 URL을 반환.
 const getClientUrl = () => {
   const mode = process.env.NODE_ENV;
 
