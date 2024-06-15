@@ -105,9 +105,6 @@ const updateCount = async (req: Request, res: Response, _: NextFunction) => {
   if (!countUpdateValidationResult && countUpdateValidationResult === false)
     throw new HttpError(400, { message: "Invalid input from client side" });
 
-  // counter의 currentCount 필드 업데이트.
-  counter.currentCount = updatedCurrentCount;
-
   /*
    ---------------------------------------------------------------------------------------------------------------------
     <단계 분리>
@@ -130,6 +127,7 @@ const updateCount = async (req: Request, res: Response, _: NextFunction) => {
 
   // currentCount의 변화량.
   const offset = updatedCurrentCount - counter.currentCount!;
+
   // currentCount의 변화량의 부호.
   const sign = Math.sign(offset);
 
@@ -196,6 +194,9 @@ const updateCount = async (req: Request, res: Response, _: NextFunction) => {
     }
   }
 
+  // counter의 currentCount 필드 업데이트.
+  counter.currentCount = updatedCurrentCount;
+
   // DB에 저장.
   await currentAchievementStack.save();
   await counter.save();
@@ -222,9 +223,6 @@ const resetCount = async (req: Request, res: Response, _: NextFunction) => {
   // 이미 counter의 currentCount가 초기 상태라면, 요청 무효화.
   if (counter.currentCount === counter.startCount)
     return res.status(201).json({ mesasge: "Reset count successfully" });
-
-  // counter의 currentCount 필드를 리셋.
-  counter.currentCount = counter.startCount;
 
   /*
    ---------------------------------------------------------------------------------------------------------------------
@@ -268,6 +266,9 @@ const resetCount = async (req: Request, res: Response, _: NextFunction) => {
     await currentAchievementStack.save();
   }
 
+  // counter의 currentCount 필드를 리셋.
+  counter.currentCount = counter.startCount;
+
   // DB에 저장.
   await counter.save();
 
@@ -300,9 +301,6 @@ const updateAchievementStack = async (
   if (updatedAchievementStack < 0)
     throw new HttpError(400, { message: "Invalid input from client side" });
 
-  // counter의 achievementStack 필드 업데이트.
-  counter.achievementStack = updatedAchievementStack;
-
   /*
    ---------------------------------------------------------------------------------------------------------------------
     <단계 분리>
@@ -329,6 +327,9 @@ const updateAchievementStack = async (
     createdAt: new Date(),
     achievedAt: null,
   });
+
+  // counter의 achievementStack 필드 업데이트.
+  counter.achievementStack = updatedAchievementStack;
 
   // counter의 achievementStackHistory에 새로운 achievementStack을 추가.
   counter.achievementStackHistory.push(newAchievementHistory._id);
@@ -367,9 +368,6 @@ const resetAchievementStack = async (
       .status(201)
       .json({ message: "Reset achievement stack successfully" });
 
-  // counter의 achievementStack 필드 리셋.
-  counter.achievementStack = 0;
-
   /*
    ---------------------------------------------------------------------------------------------------------------------
     <단계 분리>
@@ -403,6 +401,9 @@ const resetAchievementStack = async (
   await AchievementStack.deleteMany({
     _id: { $in: achievementStackHistoryIds },
   });
+
+  // counter의 achievementStack 필드 리셋.
+  counter.achievementStack = 0;
 
   // DB에 저장.
   await lastHistory?.save();

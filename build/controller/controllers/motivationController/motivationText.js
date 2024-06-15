@@ -9,29 +9,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const motivation_1 = require("@/controller/controllers/motivationController/controller-utils-not-shared/motivation");
+const motivation_2 = require("@/validation/motivation");
 const errorWrapper_1 = require("@/error/errorWrapper");
 const HttpError_1 = require("@/error/HttpError");
-const motivation_1 = require("@/validation/motivation");
-const motivation_2 = require("@/controller/controllers/motivationController/controller-utils-not-shared/motivation");
-// 단일 모티베이션 텍스트를 가져오는 컨트롤러.
+// 단일 motivationText를 가져오는 컨트롤러.
 const getMotivationText = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
+    // 요청한 motivationText의 id가 요청 패러미터에 저장.
     const { motivationTextId } = req.params;
-    // 모티베이션 텍스트를 가져옴.
-    const motivationText = yield (0, motivation_2.findMotivationText)(motivationTextId);
+    // 요청한 motivationText를 DB로부터 쿼리.
+    const motivationText = yield (0, motivation_1.findMotivationText)(motivationTextId);
     return res.status(200).json({ motivationText });
 });
-// 모티베이션 텍스트를 수정하는 컨트롤러.
+// motivationText를 수정하는 컨트롤러.
 const editMotivationText = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
+    // 수정 요청한 motivationText의 id를 요청 패러미터에 저장.
     const { motivationTextId } = req.params;
-    // 수정할 모티베이션 텍스트를 가져옴.
-    const motivationText = yield (0, motivation_2.findMotivationText)(motivationTextId);
-    // 모티베이션 텍스트 수정에 대한 유효성 검사.
-    const { error } = (0, motivation_1.motivationTextValidation)(req.body);
+    // 수정 요청한 motivationText를 DB로부터 쿼리.
+    const motivationText = yield (0, motivation_1.findMotivationText)(motivationTextId);
+    // 요청의 body에 저장 된 수정을 위해 업데이트 된 motivationText 데이터에 대한 유효성 검사.
+    const { error } = (0, motivation_2.motivationTextValidation)(req.body);
+    // 요청의 body에 저장 된 수정을 위해 업데이트 된 motivationText 데이터에 대한 유효성 검사 실패 시 에러 처리.
     if (error)
         throw new HttpError_1.HttpError(400, { message: error.details[0].message });
-    // 모티베이션 텍스트 수정 및 저장.
+    // motivationText 수정.
     const { text } = req.body;
     motivationText.text = text;
+    // DB에 저장.
     yield motivationText.save();
     return res.status(201).json({ message: "Edit motivation text successfully" });
 });

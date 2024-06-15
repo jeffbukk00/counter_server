@@ -1,5 +1,4 @@
 "use strict";
-// 버킷에 대한 모델 생성.
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const bucketSchema = new mongoose_1.Schema({

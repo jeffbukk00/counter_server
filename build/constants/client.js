@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CLIENT_HOST = void 0;
+// 클라이언트의 URL을 반환.
 const getClientUrl = () => {
     const mode = process.env.NODE_ENV;
     const dev = process.env.CLIENT_HOST_DEV;

@@ -1,5 +1,4 @@
 "use strict";
-// 카운터에 대한 모델 생성.
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const counterSchema = new mongoose_1.Schema({

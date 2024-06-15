@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// counter에 관한 컨트롤러에서 참조 하는 상수들.
 const counterConstants = {
     direction: {
         up: 0,

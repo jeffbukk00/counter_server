@@ -9,30 +9,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const motivation_1 = require("@/controller/controllers/motivationController/controller-utils-not-shared/motivation");
+const motivation_2 = require("@/validation/motivation");
 const errorWrapper_1 = require("@/error/errorWrapper");
 const HttpError_1 = require("@/error/HttpError");
-const motivation_1 = require("@/validation/motivation");
-const motivation_2 = require("@/controller/controllers/motivationController/controller-utils-not-shared/motivation");
-// 단일 모티베이션 링크를 가져오는 역할을 하는 컨트롤러.
+// 단일 motivationLink를 가져오는 역할을 하는 컨트롤러.
 const getMotivationLink = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
+    // 요청한 motivationLink의 id가 요청 패러미터에 저장.
     const { motivationLinkId } = req.params;
-    // 모티베이션 링크를 가져옴.
-    const motivationLink = yield (0, motivation_2.findMotivationLink)(motivationLinkId);
+    // motivationLink를 DB로부터 쿼리.
+    const motivationLink = yield (0, motivation_1.findMotivationLink)(motivationLinkId);
     return res.status(200).json({ motivationLink });
 });
-// 모티베이션 링크를 수정하는 역할을 하는 컨트롤러.
+// motivationLink를 수정하는 역할을 하는 컨트롤러.
 const editMotivationLink = (req, res, _) => __awaiter(void 0, void 0, void 0, function* () {
+    // 수정 요청한 motivationLink의 id가 요청 패러미터에 저장.
     const { motivationLinkId } = req.params;
-    // 모티베이션 링크를 가져옴.
-    const motivationLink = yield (0, motivation_2.findMotivationLink)(motivationLinkId);
-    // 모티베이션 링크 수정에 대한 유효성 검사.
-    const { error } = (0, motivation_1.motivationLinkValidation)(req.body);
+    // 수정 요청한 motivationLink를 DB로부터 쿼리.
+    const motivationLink = yield (0, motivation_1.findMotivationLink)(motivationLinkId);
+    // 요청의 body에 저장 된 업데이트 된 motivationLink의 데이터에 대한 유효성 검사.
+    const { error } = (0, motivation_2.motivationLinkValidation)(req.body);
+    // 요청의 body에 저장 된 업데이트 된 motivationLink의 데이터에 대한 유효성 검사가 실패하는 경우 에러 처리.
     if (error)
         throw new HttpError_1.HttpError(400, { message: error.details[0].message });
-    // 모티베이션 링크 수정 및 저장.
+    // motivationLink 수정.
     const { title, link } = req.body;
     motivationLink.title = title;
     motivationLink.link = link;
+    // DB에 저장.
     yield motivationLink.save();
     return res.status(201).json({ message: "Edit motivation link successfully" });
 });

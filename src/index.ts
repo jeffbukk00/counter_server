@@ -1,5 +1,10 @@
-// 라이브러리.
 import dotenv from "dotenv";
+
+// 디렉토리 루트에 존재하는 .env 파일에 대한 설정.
+// 프로젝트 내에서 환경변수 사용 가능해짐.
+dotenv.config();
+
+// 라이브러리.
 import mongoose from "mongoose";
 import express from "express";
 import cors from "cors";
@@ -30,10 +35,6 @@ import { defaultErrorMiddleware } from "./error/defaultErrorMiddleware";
 // 기타.
 import { CLIENT_HOST } from "./constants/client";
 import confirmAuthorized from "@/middlewares/confirmAuthorized";
-
-// 디렉토리 루트에 존재하는 .env 파일에 대한 설정.
-// 프로젝트 내에서 환경변수 사용 가능해짐.
-dotenv.config();
 
 // 데이터베이스 연결
 // ODM으로 mongoose 사용
