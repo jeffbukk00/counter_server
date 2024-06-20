@@ -1,4 +1,4 @@
-[Server Repository - 🔗: https://github.com/jeffbukk00/counter_client]
+[Client Repository - 🔗: https://github.com/jeffbukk00/counter_client]
 
 # 카운터
 
